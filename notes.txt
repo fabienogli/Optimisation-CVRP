@@ -1,0 +1,17 @@
+-methode pour voisinage ==> cross-exchange
+-modeliser solution 
+-implementer deux méta-heuristiques
+
+Modé:
+Graphe G =(V,E) représente le graphe du cvrp
+V={v0,v1,....,vn} ==> ensemble de sommets du graphe cvrp
+E={(vi,vj)€ VxV} ==> désigne un ensemble d'arêtes du graphe
+le sommet vo ==>dépot
+m véhicules identiques de capacité C partent de vo pour desservir les clients(idem que sommet).
+c(ij) ==> distance  entre sommet vi et vj
+chaque client/sommet vi attend une quantité qi d'articles qui doit lui être livré
+
+modé solution possible= soit 4 tournées, on peut effectuer un croisement sur les tournées
+
+
+
