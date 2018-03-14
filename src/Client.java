@@ -52,4 +52,13 @@ public class Client {
     public int hashCode() {
         return Objects.hash(idClient, coordonnee.hashCode(), quantite);
     }
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "idClient=" + idClient +
+                ", coordonnee=" + coordonnee.toString() +
+                ", quantite=" + quantite +
+                '}';
+    }
 }
