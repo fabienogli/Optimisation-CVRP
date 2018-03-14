@@ -48,4 +48,16 @@ public class Coordonnee {
     public int hashCode() {
         return Objects.hash(x, y);
     }
+
+    @Override
+    public String toString() {
+        return "Coordonnee{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
+    }
+
+    public static double distance(Coordonnee a, Coordonnee b) {
+        return Math.sqrt(Math.pow(b.getY() - a.getY(), 2) - Math.pow(b.getX() - a.getY(), 2));
+    }
 }
