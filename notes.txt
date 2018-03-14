@@ -13,5 +13,6 @@ chaque client/sommet vi attend une quantité qi d'articles qui doit lui être livr
 
 modé solution possible= soit 4 tournées, on peut effectuer un croisement sur les tournées
 
+1EA8B2C7F1E5F437
 
 
