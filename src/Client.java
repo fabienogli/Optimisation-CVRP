@@ -1,31 +1,10 @@
-import java.util.Objects;
+public class Client extends Sommet {
 
-public class Client {
-
-    private int idClient;
-    private Coordonnee coordonnee;
     private int quantite;
 
     public Client(int idClient, Coordonnee coordonnee, int quantite) {
-        this.idClient = idClient;
-        this.coordonnee = coordonnee;
+        super(idClient, coordonnee);
         this.quantite = quantite;
-    }
-
-    public int getIdClient() {
-        return idClient;
-    }
-
-    public void setIdClient(int idClient) {
-        this.idClient = idClient;
-    }
-
-    public Coordonnee getCoordonnee() {
-        return coordonnee;
-    }
-
-    public void setCoordonnee(Coordonnee coordonnee) {
-        this.coordonnee = coordonnee;
     }
 
     public int getQuantite() {
@@ -37,28 +16,8 @@ public class Client {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o){ return true;}
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Client client = (Client) o;
-        return idClient == client.idClient &&
-                quantite == client.quantite &&
-                Objects.equals(coordonnee, client.coordonnee);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(idClient, coordonnee.hashCode(), quantite);
-    }
-
-    @Override
     public String toString() {
-        return "Client{" +
-                "idClient=" + idClient +
-                ", coordonnee=" + coordonnee.toString() +
-                ", quantite=" + quantite +
-                '}';
+        return "{Client: " + super.toString() + "quantite = " + this.quantite + '}';
     }
+
 }
