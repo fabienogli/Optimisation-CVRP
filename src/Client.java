@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Client {
 
     private int idClient;
@@ -32,5 +34,22 @@ public class Client {
 
     public void setQuantite(int quantite) {
         this.quantite = quantite;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o){ return true;}
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Client client = (Client) o;
+        return idClient == client.idClient &&
+                quantite == client.quantite &&
+                Objects.equals(coordonnee, client.coordonnee);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idClient, coordonnee.hashCode(), quantite);
     }
 }
