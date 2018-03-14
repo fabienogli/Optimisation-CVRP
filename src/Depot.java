@@ -1,5 +1,8 @@
 public class Depot extends Sommet {
 
+    public Depot() {
+    }
+
     public Depot(Coordonnee coordonnee) {
         super(0, coordonnee);
     }

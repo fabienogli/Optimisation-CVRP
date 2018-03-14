@@ -4,6 +4,9 @@ abstract class Sommet {
     private int idSommet;
     private Coordonnee coordonnee;
 
+    public Sommet() {
+    }
+
     public Sommet(int idClient, Coordonnee coordonnee) {
         this.idSommet = idClient;
         this.coordonnee = coordonnee;
