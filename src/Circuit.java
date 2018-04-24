@@ -1,39 +1,32 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
-import java.util.Objects;
 
 public class Circuit {
 
-    public Map<Integer, Sommet> sommets;
+    private HashMap<Integer, Arc> arcs;
 
     public Circuit() {
+        this.arcs = new HashMap<>();
     }
 
-    public Circuit(Map<Integer, Sommet> sommets) {
-        this.sommets = sommets;
+    public Circuit(HashMap<Integer, Arc> arcs) {
+        this.arcs = arcs;
     }
 
-    public Map<Integer, Sommet> getSommets() {
-        return sommets;
+    public double cout() {
+        double result = 0;
+        Iterator it = this.arcs.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            result += ((Arc) pair.getValue()).cout();
+            it.remove();
+        }
+        return result;
     }
 
-    public void setSommets(Map<Integer, Sommet> sommets) {
-        this.sommets = sommets;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Circuit circuit = (Circuit) o;
-        return Objects.equals(sommets, circuit.sommets);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(sommets.hashCode());
-    }
-
-    public double getLongueurItineraire() {
-        this.sommets.values().stream().mapToDouble(Number::intValue).sum();
+    public double getLongueur() {
+        return this.arcs.size();
     }
 }

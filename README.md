@@ -37,3 +37,8 @@ Nous reproduisons le processus jusqu'à avoir des circuits contenant tous les so
 sommet le plus proche et arrêt quand on atteind Cmax  
 *Recuit Simulé (cours: Optimisation_meta01) *  
 On intialise T0 (la tempèrature initiale) avec la plus grande diff de l'itinéraire de la 1ère solution avec ses voisins
+
+##La fonction fitness
+Le coût d’un itinéraire R i = v i0 , v i1 , ..., v ik+1 , où v ij ÎV et v i0 = v ik+1 = v 0 , est donné par :
+cout(Ri) = Sum from j=0 to k {c_{ij+1}}
+Le coût total d’une solution est la somme des coût de chaque R i .
