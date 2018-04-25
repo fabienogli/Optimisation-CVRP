@@ -2,17 +2,52 @@ package Algos;
 
 import Util.Solution;
 
+import java.util.List;
+import java.util.Random;
+
 public class RecuitSimule {
 
     //paramètres de l'algorithme de recuit simulé
     private Solution solutionInitiale;
     private float tempInitiale;
     //fonction de decroissance de la temperature
-    public float decreaseFunction(){};
+    public float decreaseFunction(){
+
+        return 0;
+    };
     //fonction f(x)
     public float evaluateFunction(Solution solution){
     //Le coût total d’une solution est la somme des coût de chaque Ri.
         return 0;
     };
+    //generer voisinage
+    public List<Solution> generateNeighbors(){
+
+    }
+    //executer le recuit simulé
+    public Solution executeAlgo(Float tempMin){
+        //a initialiser
+        int nb_essais=0;
+        Random r = new Random();
+        float delta =0;
+        while (tempInitiale>tempMin){
+                for(int nb_etape=0;nb_etape<nb_essais;nb_etape++){
+                    List<Solution>  neighbors = generateNeighbors();
+                    int nbAlea =r.nextInt();
+                    Solution solutionCourante= neighbors.get(nbAlea);
+                    // a revoir
+                    delta = evaluateFunction(solutionCourante)-evaluateFunction(solutionInitiale);
+                    if(delta < 0){
+
+                    }else{
+                        //critère de Metropolis
+                    }
+
+
+                }
+        }
+
+        return null;
+    }
 
 }
