@@ -32,13 +32,14 @@ public class RecuitSimule {
         Random r = new Random();
         float delta =0;
         float temperatureCourante=tempInitiale;
+        Solution solutionCourante =solutionInitiale;
         while (temperatureCourante>tempMin){
                 for(int nb_etape=0;nb_etape<nb_essais;nb_etape++){
                     List<Solution>  neighbors = generateNeighbors();
                     int nbAlea =r.nextInt();
-                    Solution solutionCourante= neighbors.get(nbAlea);
+                    Solution solutionVoisine= neighbors.get(nbAlea);
                     // a revoir
-                    delta = evaluateFunction(solutionCourante)-evaluateFunction(solutionInitiale);
+                    delta = evaluateFunction(solutionVoisine)-evaluateFunction(solutionCourante);
                     if(delta < 0){
 
                     }else{
