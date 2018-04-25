@@ -11,7 +11,8 @@ public class RecuitSimule {
     private Solution solutionInitiale;
     private float tempInitiale;
     //fonction de decroissance de la temperature
-    public float decreaseFunction(){
+    public float decreaseFunction(float mu){
+
 
         return 0;
     };
@@ -25,12 +26,13 @@ public class RecuitSimule {
 
     }
     //executer le recuit simulé
-    public Solution executeAlgo(Float tempMin){
+    public Solution executeAlgo(Float tempMin,Float mu){
         //a initialiser
         int nb_essais=0;
         Random r = new Random();
         float delta =0;
-        while (tempInitiale>tempMin){
+        float temperatureCourante=tempInitiale;
+        while (temperatureCourante>tempMin){
                 for(int nb_etape=0;nb_etape<nb_essais;nb_etape++){
                     List<Solution>  neighbors = generateNeighbors();
                     int nbAlea =r.nextInt();
@@ -45,6 +47,7 @@ public class RecuitSimule {
 
 
                 }
+              temperatureCourante=decreaseFunction(mu);
         }
 
         return null;
