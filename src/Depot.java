@@ -1,10 +1,12 @@
 public class Depot extends Sommet {
 
+    public static int DEPOT = 0;
+
     public Depot() {
     }
 
     public Depot(Coordonnee coordonnee) {
-        super(0, coordonnee);
+        super(DEPOT, coordonnee);
     }
 
     @Override

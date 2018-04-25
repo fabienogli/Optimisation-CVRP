@@ -31,12 +31,13 @@ public class Arc {
     }
 
     public double cout() {
-        double result = longueur();
+        double result = distance();
         return result;
     }
 
-    private double longueur() {
-        double result = 0;
-        return result;
+    private double distance() {
+        if (this.sommets != null && this.sommets[start] != null && this.sommets[end] != null)
+            return Coordonnee.distance(this.sommets[start].getCoordonnee(), this.sommets[end].getCoordonnee());
+        return 0;
     }
 }
