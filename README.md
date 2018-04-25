@@ -29,7 +29,7 @@ Cout C = 100
   
 **Initialisation**  
 Nous devons génèrer des circuits simples.  
-Un sommet représente un Client.  
+Un sommet représente un Util.Client.  
 Nous partons du dêpot et choisissons un sommet au hasard. Nous créons un arrêtes et reproduisons le processus jusqu'à atteindre Cmax. 
 Lorsque nous atteignons Cmax, nous fermons le circuit en créant une arrête contenant le dernier sommet et le sommet de dépot  
 Nous reproduisons le processus jusqu'à avoir des circuits contenant tous les sommets.  
