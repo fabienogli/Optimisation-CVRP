@@ -33,6 +33,7 @@ public class RecuitSimule {
         Double delta = 0.0;
         Double temperatureCourante=tempInitiale;
         Solution solutionCourante =solutionInitiale;
+        Solution solutionOptimale =solutionCourante;
         while (temperatureCourante>tempMin){
                 for(int nb_etape=0;nb_etape<nb_essais;nb_etape++){
                     //ou intervertir directement des aretes
@@ -42,6 +43,10 @@ public class RecuitSimule {
                     // a revoir
                     delta = evaluateFunction(solutionVoisine)-evaluateFunction(solutionCourante);
                     if(delta < 0){
+                        solutionCourante = solutionVoisine;
+                        if(evaluateFunction(solutionVoisine) < evaluateFunction(solutionOptimale)){
+                            solutionOptimale=solutionVoisine;
+                        }
 
                     }else{
                         //critère de Metropolis
@@ -56,7 +61,7 @@ public class RecuitSimule {
               temperatureCourante=decreaseFunction(mu,temperatureCourante);
         }
 
-        return solutionCourante;
+        return solutionOptimale;
     }
 
 }
