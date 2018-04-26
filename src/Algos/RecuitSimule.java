@@ -21,7 +21,7 @@ public class RecuitSimule {
         return null;
     };
     //generer voisinage
-    public List<Solution> generateNeighbors(){
+    public Solution generateRandomNeighbors(Solution solution){
 
         return null;
     }
@@ -37,9 +37,9 @@ public class RecuitSimule {
         while (temperatureCourante>tempMin){
                 for(int nb_etape=0;nb_etape<nb_essais;nb_etape++){
                     //ou intervertir directement des aretes
-                    List<Solution>  neighbors = generateNeighbors();
+                    //List<Solution>  neighbors = generateNeighbors();
                     int nbAlea =r.nextInt();
-                    Solution solutionVoisine= neighbors.get(nbAlea);
+                    Solution solutionVoisine= generateRandomNeighbors(solutionCourante);
                     // a revoir
                     delta = evaluateFunction(solutionVoisine)-evaluateFunction(solutionCourante);
                     if(delta < 0){
@@ -47,7 +47,6 @@ public class RecuitSimule {
                         if(evaluateFunction(solutionVoisine) < evaluateFunction(solutionOptimale)){
                             solutionOptimale=solutionVoisine;
                         }
-
                     }else{
                         //critère de Metropolis
                         Double pAlea =r.nextDouble();
@@ -55,8 +54,6 @@ public class RecuitSimule {
                             solutionCourante = solutionVoisine;
                         }
                     }
-
-
                 }
               temperatureCourante=decreaseFunction(mu,temperatureCourante);
         }
