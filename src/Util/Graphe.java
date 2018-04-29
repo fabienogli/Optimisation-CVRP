@@ -12,6 +12,31 @@ import java.util.*;
 public class Graphe {
 
     private Depot depot;
+
+    public Depot getDepot() {
+        return depot;
+    }
+
+    public void setDepot(Depot depot) {
+        this.depot = depot;
+    }
+
+    public Map<Integer, Client> getClients() {
+        return clients;
+    }
+
+    public void setClients(Map<Integer, Client> clients) {
+        this.clients = clients;
+    }
+
+    public ArrayList<Circuit> getCircuits() {
+        return circuits;
+    }
+
+    public void setCircuits(ArrayList<Circuit> circuits) {
+        this.circuits = circuits;
+    }
+
     private Map<Integer, Client> clients;
     private ArrayList<Circuit> circuits = new ArrayList<>();
 

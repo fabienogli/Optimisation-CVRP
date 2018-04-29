@@ -7,29 +7,26 @@ import java.util.Random;
 
 public class RecuitSimule {
 
-    //paramètres de l'algorithme de recuit simulé
-    private Graphe solutionInitiale;
-    private Double tempInitiale;
+
     //fonction de decroissance de la temperature
-    public Double decreaseFunction(Double mu,Double temperature){
+    public static Double decreaseFunction(Double mu, Double temperature){
         return temperature*mu;
     };
     //fonction f(x)
-    public Double evaluateFunction(Graphe solution){
+    public static Double evaluateFunction(Graphe solution){
     //Le coût total d’une solution est la somme des coût de chaque Ri.
-
-        return null;
+        return solution.cout();
     };
     //generer voisinage
-    public Graphe generateRandomNeighbors(Graphe solution){
+    public static Graphe generateRandomNeighbors(Graphe solution){
 
         return null;
     }
     //executer le recuit simulé
-    public Graphe executeAlgo(Double tempMin,Double mu){
+    public static Graphe executeAlgo(Double tempMin,Double mu,Graphe solutionInitiale,Double tempInitiale){
         //a initialiser
         //equilibre statique = nbre de clients
-        int nb_essais=0;
+        int nb_essais=solutionInitiale.getClients().size()-1;
         Random r = new Random();
         Double delta = 0.0;
         Double temperatureCourante=tempInitiale;
