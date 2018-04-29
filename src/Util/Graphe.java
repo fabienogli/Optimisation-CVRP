@@ -14,7 +14,7 @@ import java.util.Map;
 public class Graphe {
 
     private Depot depot;
-    private Map<Integer, Client> clients  ;
+    private Map<Integer, Client> clients;
     private ArrayList<Arc> aretes = new ArrayList<>();
     private ArrayList<Circuit> circuits = new ArrayList<>();
 
@@ -25,27 +25,41 @@ public class Graphe {
         int i = 1;
         int nbClients = this.clients.size() - 1;
         int j = 1;
-        while (i < nbClients) {
+        while (i < nbClients || i==nbClients) {
+            System.out.println("Circuit " + i);
             int Cmax = 0;
             Circuit circuit = new Circuit();
             HashMap<Integer, Arc> arcs = new HashMap<>();
-            Arc arc1 = new Arc(this.clients.get(0), this.clients.get(i));
-            arcs.put(j, arc1);
-            j++;i++;
-            while (Cmax + this.clients.get(i).getQuantite() <= 100 || i != nbClients) {
-                Cmax += this.clients.get(i).getQuantite();
-                Arc arc = new Arc(this.clients.get(i - 1), this.clients.get(i));
-                arcs.put(j, arc);
-                j++;i++;
+            if (i < nbClients) {
+                Arc arc1 = new Arc(this.clients.get(0), this.clients.get(i));
+                arcs.put(j, arc1);
+                j++;
+                i++;
+                while ((Cmax + this.clients.get(i).getQuantite()) <= 100 && i != nbClients) {
+                    //  while ((Cmax + this.clients.get(i).getQuantite()) <= 100 ) {
+                    Cmax += this.clients.get(i).getQuantite();
+                    Arc arc = new Arc(this.clients.get(i - 1), this.clients.get(i));
+                    arcs.put(j, arc);
+                    j++;
+                    i++;
+                    System.out.println("Cmax=" + Cmax);
+                }
+                Arc arc2 = new Arc(this.clients.get(i), this.clients.get(0));
+                arcs.put(j, arc2);
+                j++;
+            }else if(i==nbClients){
+                Arc arc1 = new Arc(this.clients.get(0), this.clients.get(i));
+                arcs.put(j, arc1);
+                j++;
+                Arc arc2 = new Arc(this.clients.get(i), this.clients.get(0));
+                arcs.put(j, arc2);
+                j++;
+                i++;//pour sortir
             }
-            Arc arc2 = new Arc(this.clients.get(i), this.clients.get(0));
-            arcs.put(j, arc2);
-            j++;
             circuit.setArcs(arcs);
             circuits.add(circuit);
-
         }
-
+        System.out.println("Fin Construction");
     }
 
     private Graph adaptGraphe() {
@@ -55,9 +69,13 @@ public class Graphe {
         SpriteManager sman = new SpriteManager(graph);
         int h = 1;
         for (int i = 0; i < circuits.size(); i++) {
-            for (int j = 1; j < circuits.get(i).getArcs().size(); j++) {
-
-                graph.addEdge(Integer.toString(h), Integer.toString(circuits.get(i).getArcs().get(j).getSommets()[0].getIdSommet()), Integer.toString(circuits.get(i).getArcs().get(j).getSommets()[1].getIdSommet()));
+            System.out.println("Circuit " + i);
+            for (int keySet: circuits.get(i).getArcs().keySet()) {
+                String s1 = Integer.toString(h);
+                String s2 = Integer.toString(circuits.get(i).getArcs().get(keySet).getSommets()[0].getIdSommet());
+                String s3 = Integer.toString(circuits.get(i).getArcs().get(keySet).getSommets()[1].getIdSommet());
+                graph.addEdge(s1, s2, s3);
+                System.out.println(s1 + "-" + s2 + "-" + s3);
                 h++;
             }
         }
