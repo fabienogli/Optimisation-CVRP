@@ -1,5 +1,6 @@
 package Util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -15,6 +16,16 @@ public class Circuit {
     }
 
     private HashMap<Integer, Arc> arcs;
+
+    public ArrayList<Client> getClients() {
+        return clients;
+    }
+
+    public void setClients(ArrayList<Client> clients) {
+        this.clients = clients;
+    }
+
+    private ArrayList<Client> clients = new ArrayList<>();
 
     public Circuit() {
         this.arcs = new HashMap<>();

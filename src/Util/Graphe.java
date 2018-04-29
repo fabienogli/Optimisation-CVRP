@@ -57,6 +57,7 @@ public class Graphe {
                 arcs.put(j, arc1);
                 j++;
                 i++;
+                circuit.getClients().add(this.clients.get(i));
                 while ((Cmax + this.clients.get(i).getQuantite()) <= 100 && i != nbClients) {
                     //  while ((Cmax + this.clients.get(i).getQuantite()) <= 100 ) {
                     Cmax += this.clients.get(i).getQuantite();
@@ -64,6 +65,7 @@ public class Graphe {
                     arcs.put(j, arc);
                     j++;
                     i++;
+                    circuit.getClients().add(this.clients.get(i));
                     System.out.println("Cmax=" + Cmax);
                 }
                 Arc arc2 = new Arc(this.clients.get(i-1), this.clients.get(0));
@@ -77,6 +79,7 @@ public class Graphe {
                 arcs.put(j, arc2);
                 j++;
                 i++;//pour sortir
+                circuit.getClients().add(this.clients.get(i));
             }
             circuit.setArcs(arcs);
             circuits.add(circuit);
