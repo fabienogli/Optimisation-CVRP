@@ -1,6 +1,7 @@
 package Util;
 
 import org.graphstream.graph.Graph;
+import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.ui.spriteManager.SpriteManager;
@@ -69,7 +70,6 @@ public class Graphe {
             graph.addNode(Integer.toString(client.getIdSommet()));
         });
         for (int i = 0; i < circuits.size(); i++) {
-
             System.out.println("Circuit " + i);
            for (int keySet : circuits.get(i).getArcs().keySet()) {
                 String s2 = Integer.toString(circuits.get(i).getArcs().get(keySet).getSommets()[0].getIdSommet());
@@ -77,7 +77,9 @@ public class Graphe {
                 graph.addEdge(s2+s3, s2, s3);
                 System.out.println(s2+s3 + "-" + s2 + "-" + s3);
             }
-
+        }
+        for (Node node : graph) {
+            node.addAttribute("ui.label", node.getId());
         }
         return graph;
     }
