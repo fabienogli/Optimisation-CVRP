@@ -42,8 +42,14 @@ public class Graphe {
         }
 
     }
+    private Graph adaptGraphe(Graphe g){
+
+
+        return null;
+    }
 
     public static void main(String args[]) {
+        Graphe graphe = new Graphe("data01");
         Graph graph = new SingleGraph("Tutorial 1");
         graph.addNode("A");
         graph.addNode("B");
