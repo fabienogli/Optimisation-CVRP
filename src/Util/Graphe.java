@@ -22,26 +22,28 @@ public class Graphe {
     public Graphe(String dataset) {
         this.clients = SommetFactory.getDataFromDb("data01");
         depot = (Depot) this.clients.get(0);
-
-        int nbClients = this.clients.size() - 1;
         int i = 1;
+        int nbClients = this.clients.size() - 1;
         int j = 1;
         while (i < nbClients) {
             int Cmax = 0;
             Circuit circuit = new Circuit();
             HashMap<Integer, Arc> arcs = new HashMap<>();
+            Arc arc1 = new Arc(this.clients.get(0), this.clients.get(i));
+            arcs.put(j, arc1);
+            j++;i++;
             while (Cmax + this.clients.get(i).getQuantite() <= 100 || i != nbClients) {
                 Cmax += this.clients.get(i).getQuantite();
                 Arc arc = new Arc(this.clients.get(i - 1), this.clients.get(i));
                 arcs.put(j, arc);
-                j++;
-                i++;
+                j++;i++;
             }
-            Arc arc = new Arc(this.clients.get(i), this.clients.get(0));
-            arcs.put(j, arc);
+            Arc arc2 = new Arc(this.clients.get(i), this.clients.get(0));
+            arcs.put(j, arc2);
             j++;
             circuit.setArcs(arcs);
             circuits.add(circuit);
+
         }
 
     }
@@ -53,11 +55,11 @@ public class Graphe {
         SpriteManager sman = new SpriteManager(graph);
         int h = 1;
         for (int i = 0; i < circuits.size(); i++) {
-            for (int j = 0; j < circuits.get(i).getArcs().size(); j++) {
+            for (int j = 1; j < circuits.get(i).getArcs().size(); j++) {
 
                 graph.addEdge(Integer.toString(h), Integer.toString(circuits.get(i).getArcs().get(j).getSommets()[0].getIdSommet()), Integer.toString(circuits.get(i).getArcs().get(j).getSommets()[1].getIdSommet()));
+                h++;
             }
-
         }
         return graph;
     }
