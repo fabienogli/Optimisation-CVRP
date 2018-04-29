@@ -9,8 +9,8 @@ import java.util.Map;
 
 public class SommetFactory {
 
-    public static Map<Integer, Sommet> getDataFromDb(String dataset) {
-        Map<Integer, Sommet> sommets = new HashMap<>();
+    public static Map<Integer, Client> getDataFromDb(String dataset) {
+        Map<Integer, Client> sommets = new HashMap<>();
         int i_id = 0;
         int i_x = 1;
         int i_y = 2;

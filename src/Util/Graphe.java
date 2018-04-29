@@ -9,12 +9,22 @@ import java.util.Map;
 public class Graphe {
 
     private Depot depot;
-    private Map<Integer, Sommet> clients;
+    private Map<Integer, Client> clients;
     private ArrayList<Arc> aretes = new ArrayList<>();
+    private Circuit[] circuits = new Circuit[4];
+
 
     public Graphe(String dataset) {
         this.clients = SommetFactory.getDataFromDb("data01");
         depot = (Depot) this.clients.get(0);
+        for(int i =0;i<this.clients.size()-1;i++){
+            int Cmax = 0;
+            int j = 1;
+            while (Cmax <=100){
+                Arc arc = new Arc(depot,this.clients.get(j));
+                Cmax += this.clients.get(j).getQuantite();
+            }
+        }
     }
 
     public static void main(String args[]) {

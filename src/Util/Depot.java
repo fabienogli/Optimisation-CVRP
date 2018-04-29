@@ -1,6 +1,6 @@
 package Util;
 
-public class Depot extends Sommet {
+public class Depot extends Client {
 
     public static int DEPOT = 0;
 
