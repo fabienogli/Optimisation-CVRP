@@ -13,7 +13,6 @@ public class Graphe {
 
     private Depot depot;
     private Map<Integer, Client> clients;
-    private ArrayList<Arc> aretes = new ArrayList<>();
     private ArrayList<Circuit> circuits = new ArrayList<>();
 
 
