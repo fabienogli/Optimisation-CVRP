@@ -59,4 +59,8 @@ public class Graphe {
         graph.addEdge("CA", "C", "A");
         graph.display();
     }
+
+    public double cout() {
+        return circuits.stream().mapToDouble(Circuit::cout).sum();
+    }
 }
