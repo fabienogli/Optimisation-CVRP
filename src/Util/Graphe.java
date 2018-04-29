@@ -17,12 +17,14 @@ public class Graphe {
     public Graphe(String dataset) {
         this.clients = SommetFactory.getDataFromDb("data01");
         depot = (Depot) this.clients.get(0);
+        int j = 1;
         for(int i =0;i<this.clients.size()-1;i++){
             int Cmax = 0;
-            int j = 1;
+
             while (Cmax <=100){
                 Arc arc = new Arc(depot,this.clients.get(j));
                 Cmax += this.clients.get(j).getQuantite();
+                j++;
             }
         }
     }
