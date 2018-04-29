@@ -6,6 +6,14 @@ import java.util.Map;
 
 public class Circuit {
 
+    public HashMap<Integer, Arc> getArcs() {
+        return arcs;
+    }
+
+    public void setArcs(HashMap<Integer, Arc> arcs) {
+        this.arcs = arcs;
+    }
+
     private HashMap<Integer, Arc> arcs;
 
     public Circuit() {
