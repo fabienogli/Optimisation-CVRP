@@ -1,7 +1,6 @@
 package Algos;
 
 import Util.Graphe;
-import Util.Solution;
 
 import java.util.List;
 import java.util.Random;
