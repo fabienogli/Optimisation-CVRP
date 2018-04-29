@@ -37,6 +37,7 @@ public class Graphe {
             }
             Arc arc = new Arc(this.clients.get(i), this.clients.get(0));
             arcs.put(j, arc);
+            j++;
             circuit.setArcs(arcs);
             circuits.add(circuit);
         }
