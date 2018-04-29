@@ -32,12 +32,12 @@ public class Genetique {
 
     }
 
-    public HashMap<Integer, Graphe> reproduction(HashMap<Integer, Graphe> graphes) {
+    public static HashMap<Integer, Graphe> reproduction(HashMap<Integer, Graphe> graphes) {
         HashMap<Integer, Graphe> kiddo = new HashMap<Integer, Graphe>();
         Double sum = graphes.values().stream().mapToDouble(Graphe::cout).sum();
         HashMap<Integer, Double> freq = new HashMap<>();
         graphes.forEach((integer, graphe) -> {
-            double result = graphe.cout() /sum;
+            double result = graphe.cout() / sum;
             freq.put(integer, result);
         });
 
@@ -48,5 +48,10 @@ public class Genetique {
             kiddo.put(i, graphes.get(key));
         }
         return kiddo;
+    }
+
+    public Graphe crossover(Graphe first, Graphe second) {
+        Graphe kid = new Graphe();
+        return kid;
     }
 }

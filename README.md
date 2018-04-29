@@ -49,3 +49,6 @@ Deux graphes G et G' composés de deux tab de Circuit.
 PB : les doublons et certain sommets peuvent disparaîtres
 - autre solutions
 faire une liste des sommets dans l'ordre pour un circuit -> codage d'un graphe
+- a chaque circuit, le pété à un endroit
+ combiner les circuit dans un graph de sorte à avoir tous les sommets
+ S'ils n'y sont pas tous: les rajouter manuellement

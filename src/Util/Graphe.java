@@ -71,12 +71,13 @@ public class Graphe {
         return graph;
     }
 
-    public static Graph adaptGraphe(ArrayList<Circuit> circuits) {
+    public static Graph adaptGraphe(Graphe graphe) {
         Graph graph = new SingleGraph("Graphe");
         graph.setStrict(false);
         graph.setAutoCreate(true);
         SpriteManager sman = new SpriteManager(graph);
         int h = 1;
+        ArrayList<Circuit> circuits = graphe.getCircuits();
         for (int i = 0; i < circuits.size(); i++) {
             for (int j = 0; j < circuits.get(i).getArcs().size(); j++) {
 
@@ -87,12 +88,15 @@ public class Graphe {
         return graph;
     }
 
-    public static ArrayList<Circuit> generateRandomGraph(String dataset) {
+    public static Graphe generateRandomGraph(String dataset) {
+        Graphe graphe = new Graphe();
         int Cmax = 100;
         ArrayList<Circuit> circuits = new ArrayList<Circuit>();
         Map<Integer, Client> clients = SommetFactory.getDataFromDb(dataset);
         Depot depot = (Depot) clients.get(0);
         clients.remove(depot.getIdSommet(), depot);
+        graphe.setDepot(depot);
+        graphe.setClients(clients);
         Circuit circuit = new Circuit();
         HashMap<Integer, Arc> arcs = new HashMap<>();
         int cout = 0;
@@ -124,7 +128,8 @@ public class Graphe {
             i_arc++;
             clients.remove(randomKey, client);
         }
-        return circuits;
+        graphe.setCircuits(circuits);
+        return graphe;
     }
 
     public static void main(String args[]) {
@@ -144,5 +149,37 @@ public class Graphe {
 
     public double cout() {
         return circuits.stream().mapToDouble(Circuit::cout).sum();
+    }
+
+    public Depot getDepot() {
+        return depot;
+    }
+
+    public void setDepot(Depot depot) {
+        this.depot = depot;
+    }
+
+    public Map<Integer, Client> getClients() {
+        return clients;
+    }
+
+    public void setClients(Map<Integer, Client> clients) {
+        this.clients = clients;
+    }
+
+    public ArrayList<Arc> getAretes() {
+        return aretes;
+    }
+
+    public void setAretes(ArrayList<Arc> aretes) {
+        this.aretes = aretes;
+    }
+
+    public ArrayList<Circuit> getCircuits() {
+        return circuits;
+    }
+
+    public void setCircuits(ArrayList<Circuit> circuits) {
+        this.circuits = circuits;
     }
 }

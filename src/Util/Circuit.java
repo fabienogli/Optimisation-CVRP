@@ -25,14 +25,7 @@ public class Circuit {
     }
 
     public double cout() {
-        double result = 0;
-        Iterator it = this.arcs.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry) it.next();
-            result += ((Arc) pair.getValue()).cout();
-            it.remove();
-        }
-        return result;
+        return this.arcs.values().stream().mapToDouble(Arc::cout).sum();
     }
 
     public double getLongueur() {
