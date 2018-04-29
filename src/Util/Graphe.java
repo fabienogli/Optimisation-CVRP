@@ -12,12 +12,21 @@ import java.util.*;
 public class Graphe {
 
     private Depot depot;
-    private Map<Integer, Client> clients  ;
-    private ArrayList<Arc> aretes = new ArrayList<>();
-    private ArrayList<Circuit> circuits = new ArrayList<>();
+    private Map<Integer, Client> clients;
+    private ArrayList<Arc> aretes;
+    private ArrayList<Circuit> circuits;
 
+    public Graphe() {
+        aretes = new ArrayList<>();
+        circuits = new ArrayList<>();
+    }
+
+    public Graphe(ArrayList<Circuit> circuits) {
+        this.circuits = circuits;
+    }
 
     public Graphe(String dataset) {
+        this();
         this.clients = SommetFactory.getDataFromDb("data01");
         depot = (Depot) this.clients.get(0);
         int i = 1;
@@ -51,9 +60,6 @@ public class Graphe {
         graph.setStrict(false);
         graph.setAutoCreate(true);
         SpriteManager sman = new SpriteManager(graph);
-        this.clients.forEach((integer, client) -> {
-            graph.addNode(Integer.toString(client.getIdSommet()));
-        });
         int h = 1;
         for (int i = 0; i < circuits.size(); i++) {
             for (int j = 1; j < circuits.get(i).getArcs().size(); j++) {

@@ -42,3 +42,10 @@ On intialise T0 (la tempèrature initiale) avec la plus grande diff de l'itinér
 Le coût d’un itinéraire R i = v i0 , v i1 , ..., v ik+1 , où v ij ÎV et v i0 = v ik+1 = v 0 , est donné par :
 cout(Ri) = Sum from j=0 to k {c_{ij+1}}
 Le coût total d’une solution est la somme des coût de chaque R i .
+
+##Algo génétique
+Deux graphes G et G' composés de deux tab de Circuit.
+- On choisit un sommet au hasard et on les croise sur ce sommet
+PB : les doublons et certain sommets peuvent disparaîtres
+- autre solutions
+faire une liste des sommets dans l'ordre pour un circuit -> codage d'un graphe
