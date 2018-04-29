@@ -9,14 +9,14 @@ import java.util.Map;
 
 public class SommetFactory {
 
-    public static Map<Integer, Sommet> getDataFromDb() {
+    public static Map<Integer, Sommet> getDataFromDb(String dataset) {
         Map<Integer, Sommet> sommets = new HashMap<>();
         int i_id = 0;
         int i_x = 1;
         int i_y = 2;
         int i_q = 3;
         try {
-            FileReader fileReader = new FileReader("src/data/data01.txt");
+            FileReader fileReader = new FileReader("src/data/"+dataset+".txt");
             BufferedReader db = new BufferedReader(fileReader);
             String chaine;
             int i = 1;

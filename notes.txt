@@ -15,4 +15,5 @@ modé solution possible= soit 4 tournées, on peut effectuer un croisement sur les
 
 1EA8B2C7F1E5F437
 
+voisinage construit par 2opt
 
