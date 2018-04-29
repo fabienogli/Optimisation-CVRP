@@ -1,7 +1,9 @@
 package Util;
 
 import org.graphstream.graph.Graph;
+import org.graphstream.graph.implementations.MultiGraph;
 import org.graphstream.graph.implementations.SingleGraph;
+import org.graphstream.ui.spriteManager.SpriteManager;
 import scala.Int;
 
 import java.util.ArrayList;
@@ -12,7 +14,7 @@ import java.util.Map;
 public class Graphe {
 
     private Depot depot;
-    private Map<Integer, Client> clients;
+    private Map<Integer, Client> clients  ;
     private ArrayList<Arc> aretes = new ArrayList<>();
     private ArrayList<Circuit> circuits = new ArrayList<>();
 
@@ -43,21 +45,35 @@ public class Graphe {
         }
 
     }
-    private Graph adaptGraphe(Graphe g){
 
+    private Graph adaptGraphe() {
+        Graph graph = new SingleGraph("Graphe");
+        graph.setStrict(false);
+        graph.setAutoCreate(true);
+        SpriteManager sman = new SpriteManager(graph);
+        int h = 1;
+        for (int i = 0; i < circuits.size(); i++) {
+            for (int j = 0; j < circuits.get(i).getArcs().size(); j++) {
 
-        return null;
+                graph.addEdge(Integer.toString(h), Integer.toString(circuits.get(i).getArcs().get(j).getSommets()[0].getIdSommet()), Integer.toString(circuits.get(i).getArcs().get(j).getSommets()[1].getIdSommet()));
+            }
+
+        }
+        return graph;
     }
 
     public static void main(String args[]) {
         Graphe graphe = new Graphe("data01");
-        Graph graph = new SingleGraph("Tutorial 1");
+       /* Graph graph = new MultiGraph("Tutorial 1");
+        SpriteManager sman = new SpriteManager(graph);
         graph.addNode("A");
         graph.addNode("B");
         graph.addNode("C");
         graph.addEdge("AB", "A", "B");
         graph.addEdge("BC", "B", "C");
         graph.addEdge("CA", "C", "A");
+        graph.display();*/
+        Graph graph = graphe.adaptGraphe();
         graph.display();
     }
 
