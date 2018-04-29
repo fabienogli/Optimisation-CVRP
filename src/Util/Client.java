@@ -4,10 +4,6 @@ public class Client extends Sommet {
 
     private int quantite;
 
-    public Client(int DEPOT, Coordonnee coordonnee) {
-        this.quantite = 0;
-    }
-
     public Client(int idClient, Coordonnee coordonnee, int quantite) {
         super(idClient, coordonnee);
         this.quantite = quantite;
