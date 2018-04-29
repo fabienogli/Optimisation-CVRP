@@ -4,12 +4,10 @@ import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.MultiGraph;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.ui.spriteManager.SpriteManager;
+import org.graphstream.ui.view.Viewer;
 import scala.Int;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Graphe {
 
@@ -67,6 +65,9 @@ public class Graphe {
         graph.setStrict(false);
         graph.setAutoCreate(true);
         SpriteManager sman = new SpriteManager(graph);
+        this.clients.forEach((integer, client) -> {
+            graph.addNode(Integer.toString(client.getIdSommet()));
+        });
         int h = 1;
         for (int i = 0; i < circuits.size(); i++) {
             System.out.println("Circuit " + i);
@@ -76,10 +77,69 @@ public class Graphe {
                 String s3 = Integer.toString(circuits.get(i).getArcs().get(keySet).getSommets()[1].getIdSommet());
                 graph.addEdge(s1, s2, s3);
                 System.out.println(s1 + "-" + s2 + "-" + s3);
+            for (int j = 1; j < circuits.get(i).getArcs().size(); j++) {
+
+                graph.addEdge(Integer.toString(h), Integer.toString(circuits.get(i).getArcs().get(j).getSommets()[0].getIdSommet()), Integer.toString(circuits.get(i).getArcs().get(j).getSommets()[1].getIdSommet()), true);
                 h++;
             }
         }
         return graph;
+    }
+
+    public static Graph adaptGraphe(ArrayList<Circuit> circuits) {
+        Graph graph = new SingleGraph("Graphe");
+        graph.setStrict(false);
+        graph.setAutoCreate(true);
+        SpriteManager sman = new SpriteManager(graph);
+        int h = 1;
+        for (int i = 0; i < circuits.size(); i++) {
+            for (int j = 0; j < circuits.get(i).getArcs().size(); j++) {
+
+                graph.addEdge(Integer.toString(h), Integer.toString(circuits.get(i).getArcs().get(j).getSommets()[0].getIdSommet()), Integer.toString(circuits.get(i).getArcs().get(j).getSommets()[1].getIdSommet()), true);
+                h++;
+            }
+        }
+        return graph;
+    }
+
+    public static ArrayList<Circuit> generateRandomGraph(String dataset) {
+        int Cmax = 100;
+        ArrayList<Circuit> circuits = new ArrayList<Circuit>();
+        Map<Integer, Client> clients = SommetFactory.getDataFromDb(dataset);
+        Depot depot = (Depot) clients.get(0);
+        clients.remove(depot.getIdSommet(), depot);
+        Circuit circuit = new Circuit();
+        HashMap<Integer, Arc> arcs = new HashMap<>();
+        int cout = 0;
+        Client lastClient = null;
+        int i_arc = 0;
+
+        while (!clients.isEmpty()) {
+            Random random = new Random();
+            List<Integer> keys = new ArrayList<>(clients.keySet());
+            int randomKey = keys.get(random.nextInt(keys.size()));
+            Client client = clients.get(randomKey);
+            if (lastClient == null) {   //C'est un nouveau circuit, on doit l'intialiser
+                circuit = new Circuit();
+                arcs = new HashMap<>();
+                cout = 0;
+                i_arc = 0;
+                lastClient = depot;
+            }
+            if (client.getQuantite() + cout >= Cmax && lastClient != null) {
+                arcs.put(i_arc, new Arc(lastClient, depot));
+                circuit.setArcs(arcs);
+                circuits.add(circuit);
+                lastClient = null;
+            } else {
+                arcs.put(i_arc, new Arc(lastClient, client));
+                cout += client.getQuantite();
+                lastClient = client;
+            }
+            i_arc++;
+            clients.remove(randomKey, client);
+        }
+        return circuits;
     }
 
     public static void main(String args[]) {
