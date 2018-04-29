@@ -11,7 +11,7 @@ public class Graphe {
     private Depot depot;
     private Map<Integer, Client> clients;
     private ArrayList<Arc> aretes = new ArrayList<>();
-    private Circuit[] circuits = new Circuit[4];
+
 
 
     public Graphe(String dataset) {
