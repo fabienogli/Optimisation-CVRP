@@ -28,6 +28,7 @@ public class RecuitSimule {
     //executer le recuit simulé
     public Solution executeAlgo(Double tempMin,Double mu){
         //a initialiser
+        //equilibre statique = nbre de clients
         int nb_essais=0;
         Random r = new Random();
         Double delta = 0.0;
