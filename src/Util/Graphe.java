@@ -1,5 +1,6 @@
 package Util;
 
+import Algos.Genetique;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.MultiGraph;
 import org.graphstream.graph.implementations.SingleGraph;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 public class Graphe {
 
     private Depot depot;
-    private ArrayList<Client> sommets;
+    private List<Client> sommets;
     private Map<Integer, Client> clients;
     private ArrayList<Arc> aretes;
     private ArrayList<Circuit> circuits;
@@ -144,7 +145,7 @@ public class Graphe {
             clients.remove(randomKey, client);
         }
         graphe.setCircuits(circuits);
-        graphe.setSommets((ArrayList) circuits.stream().map(Circuit::getSommets).collect(Collectors.toList()));
+//        graphe.setSommets();
         return graphe;
     }
 
@@ -199,11 +200,11 @@ public class Graphe {
         this.circuits = circuits;
     }
 
-    public ArrayList<Client> getSommets() {
+    public List<Client> getSommets() {
         return this.sommets;
     }
 
-    public Graphe(ArrayList<Client> sommets, boolean test) {    //Pour pouvoir faire un constructeur avec les sommets
+    public Graphe(List<Client> sommets, boolean test) {    //Pour pouvoir faire un constructeur avec les sommets
         this.sommets = sommets;
         Depot depot = (Depot) sommets.get(0);
         if (depot.getIdSommet() != 0) {
@@ -233,5 +234,30 @@ public class Graphe {
 
     public void setSommets(ArrayList<Client> sommets) {
         this.sommets = sommets;
+    }
+
+    public static Graphe swapRandomSommet(Graphe graphe) {
+        Map<Integer, Client> map = Genetique.convertListToMapPosition(graphe.getSommets());
+//        Random random = new Random();
+//        List<Integer> keys = new ArrayList<>(map.keySet());
+//        System.out.println(keys);
+//        System.out.println(graphe.getSommets());
+        return null;
+//        int firstRandomKey = keys.get(random.nextInt(keys.size()));
+//        int secondRandomKey =  keys.get(random.nextInt(keys.size()));
+//        System.out.println(map.get(firstRandomKey));
+//        while (map.get(firstRandomKey).getIdSommet() == 0) {
+//            firstRandomKey = keys.get(random.nextInt(keys.size()));
+//        }
+//        while (map.get(secondRandomKey).getIdSommet() == 0 || secondRandomKey == firstRandomKey) {
+//            secondRandomKey = keys.get(random.nextInt(keys.size()));
+//        }
+//        Client toSwap = map.get(firstRandomKey);
+//        Client toSwap1 = map.get(secondRandomKey);
+//        map.remove(toSwap);
+//        map.remove(toSwap1);
+//        map.put(secondRandomKey, toSwap);
+//        map.put(firstRandomKey, toSwap);
+//        return new Graphe(map.values().stream().collect(Collectors.toList()), true);
     }
 }

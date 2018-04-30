@@ -63,8 +63,8 @@ public class Genetique {
     }
 
     public Graphe crossover(Graphe first, Graphe second, int indice) {
-        ArrayList<Client> list2 =  second.getSommets();
-        ArrayList<Client> list1 =  first.getSommets();
+        List<Client> list2 =  second.getSommets();
+        List<Client> list1 =  first.getSommets();
         if (list1.size() <= indice) {
             return null;
         }
@@ -115,7 +115,9 @@ public class Genetique {
 
     public static Map<Integer, Client> convertListToMapPosition(List<Client> clients) {
         Map<Integer, Client> map = new HashMap<>();
+        System.out.println(clients.size());
         for (int i = 0; i < clients.size(); i++) {
+            System.out.println(clients);
             map.put(i, clients.get(i));
         }
         return map;
