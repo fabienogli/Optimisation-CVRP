@@ -120,7 +120,7 @@ public class Graphe {
             int randomKey = keys.get(random.nextInt(keys.size()));
             Client client = clients.get(randomKey);
             if (client.getIdSommet() == 0) {
-                clients.remove(client);
+                clients.remove(randomKey, client);
                 randomKey = keys.get(random.nextInt(keys.size()));
                 client = clients.get(randomKey);
             }
@@ -140,9 +140,9 @@ public class Graphe {
                 arcs.put(i_arc, new Arc(lastClient, client));
                 cout += client.getQuantite();
                 lastClient = client;
+                clients.remove(randomKey, client);
             }
             i_arc++;
-            clients.remove(randomKey, client);
         }
         graphe.setCircuits(circuits);
 //        graphe.setSommets();
