@@ -37,8 +37,14 @@ public class Arc {
     }
 
     private double distance() {
-        if (this.sommets != null && this.sommets[start] != null && this.sommets[end] != null)
+        if (this.sommets != null && this.sommets[start] != null && this.sommets[end] != null) {
             return Coordonnee.distance(this.sommets[start].getCoordonnee(), this.sommets[end].getCoordonnee());
+        }
         return 0;
+    }
+
+    @Override
+    public String toString() {
+        return this.sommets[start].toString() + "----" + this.sommets[end].toString();
     }
 }
