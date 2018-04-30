@@ -51,7 +51,7 @@ public class Graphe {
 
     public Graphe(String dataset) {
         this();
-        this.clients = SommetFactory.getDataFromDb("data01");
+        this.clients = SommetFactory.getDataFromDb(dataset);
         depot = (Depot) this.clients.get(0);
         int i = 1;
         int nbClients = this.clients.size() - 1;
@@ -199,7 +199,7 @@ public class Graphe {
     }
 
     public static void main(String args[]) {
-        Graphe graphe = new Graphe("data01");
+        Graphe graphe = new Graphe("data02");
         /*Graph graph = new MultiGraph("Tutorial 1");
         SpriteManager sman = new SpriteManager(graph);
         graph.addNode("C");
