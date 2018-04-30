@@ -266,7 +266,7 @@ public class Graphe {
         map.remove(toSwap);
         map.remove(toSwap1);
         map.put(secondRandomKey, toSwap);
-        map.put(firstRandomKey, toSwap);
+        map.put(firstRandomKey, toSwap1);
         System.out.println(map.values().stream().collect(Collectors.toList()));
         return new Graphe(map.values().stream().collect(Collectors.toList()), true);
     }

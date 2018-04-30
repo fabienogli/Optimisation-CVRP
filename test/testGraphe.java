@@ -12,8 +12,8 @@ public class testGraphe {
 //        littleTestRandom();
 //        testGenerateRandomGraph();
 //        testDisplay();
-//        testRandomSwap();
-        testConstructeurAvecSommet();
+        testRandomSwap();
+//        testConstructeurAvecSommet();
     }
 
     public static void testGenerateRandomGraph() {
