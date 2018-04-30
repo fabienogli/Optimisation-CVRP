@@ -56,7 +56,7 @@ public class Graphe {
         int i = 1;
         int nbClients = this.clients.size() - 1;
         int j = 1;
-        while (i <= nbClients ) {
+        while (i <= nbClients) {
             System.out.println("Circuit " + i);
             int Cmax = 0;
             Circuit circuit = new Circuit();
@@ -65,22 +65,23 @@ public class Graphe {
                 Arc arc1 = new Arc(this.clients.get(0), this.clients.get(i));
                 arcs.put(j, arc1);
                 j++;
-                i++;
                 circuit.getClients().add(this.clients.get(i));
-                while (i <= nbClients && (Cmax + this.clients.get(i).getQuantite()) <= 100 ) {
+                Cmax = this.clients.get(i).getQuantite();
+                i++;
+                while (i <= nbClients && (Cmax + this.clients.get(i).getQuantite()) <= 100) {
                     //  while ((Cmax + this.clients.get(i).getQuantite()) <= 100 ) {
                     Cmax += this.clients.get(i).getQuantite();
                     Arc arc = new Arc(this.clients.get(i - 1), this.clients.get(i));
                     arcs.put(j, arc);
                     j++;
-                    i++;
                     circuit.getClients().add(this.clients.get(i));
+                    i++;
                     System.out.println("Cmax=" + Cmax);
                 }
-                Arc arc2 = new Arc(this.clients.get(i-1), this.clients.get(0));
+                Arc arc2 = new Arc(this.clients.get(i - 1), this.clients.get(0));
                 arcs.put(j, arc2);
                 j++;
-            }else if(i==nbClients){
+            } else if (i == nbClients) {
                 Arc arc1 = new Arc(this.clients.get(0), this.clients.get(i));
                 arcs.put(j, arc1);
                 j++;
@@ -98,8 +99,8 @@ public class Graphe {
 
     private Graph adaptGraphe() {
         Graph graph = new MultiGraph("Graphe");
-       graph.setStrict(false);
-       graph.setAutoCreate(true);
+        graph.setStrict(false);
+        graph.setAutoCreate(true);
         graph.addAttribute("ui.stylesheet", "node { fill-color: red; }");
         SpriteManager sman = new SpriteManager(graph);
         this.clients.forEach((integer, client) -> {
@@ -107,11 +108,11 @@ public class Graphe {
         });
         for (int i = 0; i < circuits.size(); i++) {
             System.out.println("Circuit " + i);
-           for (int keySet : circuits.get(i).getArcs().keySet()) {
+            for (int keySet : circuits.get(i).getArcs().keySet()) {
                 String s2 = Integer.toString(circuits.get(i).getArcs().get(keySet).getSommets()[0].getIdSommet());
                 String s3 = Integer.toString(circuits.get(i).getArcs().get(keySet).getSommets()[1].getIdSommet());
-                graph.addEdge(s2+s3, s2, s3);
-                System.out.println(s2+s3 + "-" + s2 + "-" + s3);
+                graph.addEdge(s2 + s3, s2, s3);
+                System.out.println(s2 + s3 + "-" + s2 + "-" + s3);
             }
         }
         for (Node node : graph) {
@@ -119,6 +120,7 @@ public class Graphe {
         }
         return graph;
     }
+
     public static Graph adaptGraphe(ArrayList<Circuit> circuits) {
         Graph graph = new SingleGraph("Graphe");
         graph.setStrict(false);
