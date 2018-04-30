@@ -1,6 +1,7 @@
 package Util;
 
 import Algos.RecuitSimule;
+import Algos.Genetique;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
@@ -41,7 +42,7 @@ public class Graphe {
         this.circuits = circuits;
     }
 
-    private ArrayList<Client> sommets;
+    private List<Client> sommets;
     private Map<Integer, Client> clients;
     private ArrayList<Circuit> circuits;
 
@@ -193,7 +194,7 @@ public class Graphe {
             int randomKey = keys.get(random.nextInt(keys.size()));
             Client client = clients.get(randomKey);
             if (client.getIdSommet() == 0) {
-                clients.remove(client);
+                clients.remove(randomKey, client);
                 randomKey = keys.get(random.nextInt(keys.size()));
                 client = clients.get(randomKey);
             }
@@ -214,12 +215,17 @@ public class Graphe {
                 arcs.put(i_arc, new Arc(lastClient, client));
                 cout += client.getQuantite();
                 lastClient = client;
+                clients.remove(randomKey, client);
             }
             i_arc++;
-            clients.remove(randomKey, client);
         }
         graphe.setCircuits(circuits);
-        graphe.setSommets((ArrayList) circuits.stream().map(Circuit::getSommets).collect(Collectors.toList()));
+        List<Client> sommets = new ArrayList<>();
+        circuits.stream().forEach(circ -> {
+            sommets.addAll(circ.getSommets());
+        });
+        graphe.setSommets((ArrayList)sommets);
+//        graphe.setSommets();
         return graphe;
     }
 
@@ -247,12 +253,13 @@ public class Graphe {
         return circuits.stream().mapToDouble(Circuit::cout).sum();
     }
 
-    public ArrayList<Client> getSommets() {
+    public List<Client> getSommets() {
         return this.sommets;
     }
 
-    public Graphe(ArrayList<Client> sommets, boolean test) {    //Pour pouvoir faire un constructeur avec les sommets
+    public Graphe(List<Client> sommets, boolean test) {    //Pour pouvoir faire un constructeur avec les sommets
         this.sommets = sommets;
+        this.circuits = new ArrayList<>();
         Depot depot = (Depot) sommets.get(0);
         if (depot.getIdSommet() != 0) {
             return;
@@ -273,13 +280,59 @@ public class Graphe {
                 i_arc = 0;
                 continue;
             }
-            lastSommet = sommet;
             arcs.put(i_arc, new Arc(lastSommet, sommet));
+            lastSommet = sommet;
             i_arc++;
         }
+        arcs.put(i_arc, new Arc(lastSommet, depot));
+        circuit.setArcs(arcs);
+        this.circuits.add(circuit);
     }
 
     public void setSommets(ArrayList<Client> sommets) {
         this.sommets = sommets;
+    }
+
+    public static Graphe swapRandomSommet(Graphe graphe) {
+        Map<Integer, Client> map = Genetique.convertListToMapPosition(graphe.getSommets());
+        Random random = new Random();
+        List<Integer> keys = new ArrayList<>(map.keySet());
+        System.out.println(keys);
+//        System.out.println(graphe.getSommets());
+//        return null;
+        int firstRandomKey = keys.get(random.nextInt(keys.size()));
+        int secondRandomKey =  keys.get(random.nextInt(keys.size()));
+        System.out.println(map.get(firstRandomKey));
+        while (map.get(firstRandomKey).getIdSommet() == 0) {
+            firstRandomKey = keys.get(random.nextInt(keys.size()));
+        }
+        while (map.get(secondRandomKey).getIdSommet() == 0 || secondRandomKey == firstRandomKey) {
+            secondRandomKey = keys.get(random.nextInt(keys.size()));
+        }
+        Client toSwap = map.get(firstRandomKey);
+        Client toSwap1 = map.get(secondRandomKey);
+        map.remove(toSwap);
+        map.remove(toSwap1);
+        map.put(secondRandomKey, toSwap);
+        map.put(firstRandomKey, toSwap);
+        System.out.println(map.values().stream().collect(Collectors.toList()));
+        return new Graphe(map.values().stream().collect(Collectors.toList()), true);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        ArrayList<Circuit> circuits = ((Graphe) obj).getCircuits();
+        if (circuits.size() != this.circuits.size()) {
+            System.out.println("Les deux graphes ont des tailles différentes:");
+            System.out.println(this.circuits.size() +" et " + circuits.size());
+            return false;
+        }
+        for (int i = 0; i < this.circuits.size(); i++) {
+            if (! circuits.get(i).equals(this.circuits.get(i))) {
+                System.out.println("le circuit numero "+ i + " est different");
+                return false;
+            }
+        }
+        return true;
     }
 }

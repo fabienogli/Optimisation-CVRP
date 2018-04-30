@@ -1,5 +1,6 @@
 package Util;
 
+import java.sql.ClientInfoStatus;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -16,9 +17,7 @@ public class Circuit {
 
     public void setArcs(HashMap<Integer, Arc> arcs) {
         this.arcs = arcs;
-        this.arcs.entrySet().stream().forEach(integerArcEntry -> {
-            this.sommets.add((Client)integerArcEntry.getValue().getSommets()[Arc.start]);
-        });
+        this.arcs.forEach((key, value) -> this.sommets.add((Client) value.getSommets()[Arc.start]));
     }
 
 
@@ -56,5 +55,24 @@ public class Circuit {
 
     public int getCtotal() {
         return this.sommets.stream().mapToInt(Client::getQuantite).sum();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        Circuit circuit = (Circuit) obj;
+        Map<Integer, Arc> arcs = circuit.getArcs();
+        if (arcs.size() != this.arcs.size()) {
+            System.out.println("Ils n'y pas le même nombre d'arc");
+            return false;
+        }
+        for (int i = 0; i < this.arcs.size(); i++) {
+            if (! this.arcs.get(i).equals(arcs.get(i))) {
+                System.out.println("Ces deux arcs à l'indice: "+ i + " sont différents");
+                System.out.println(arcs.get(i));
+                System.out.println(this.arcs.get(i));
+                return false;
+            }
+        }
+        return true;
     }
 }
