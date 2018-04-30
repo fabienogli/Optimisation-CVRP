@@ -60,6 +60,6 @@ public class Coordonnee {
     }
 
     public static double distance(Coordonnee a, Coordonnee b) {
-        return Math.sqrt(Math.pow(b.getY() - a.getY(), 2) - Math.pow(b.getX() - a.getY(), 2));
+        return Math.sqrt(Math.pow(b.getY() - a.getY(), 2) + Math.pow(b.getX() - a.getY(), 2));
     }
 }

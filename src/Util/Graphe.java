@@ -5,6 +5,7 @@ import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.ui.spriteManager.SpriteManager;
+import org.graphstream.ui.view.Viewer;
 import scala.Int;
 
 import java.util.*;
@@ -38,10 +39,18 @@ public class Graphe {
     }
 
     private Map<Integer, Client> clients;
-    private ArrayList<Circuit> circuits = new ArrayList<>();
+    private ArrayList<Circuit> circuits;
 
+    public Graphe() {
+        circuits = new ArrayList<>();
+    }
+
+    public Graphe(ArrayList<Circuit> circuits) {
+        this.circuits = circuits;
+    }
 
     public Graphe(String dataset) {
+        this();
         this.clients = SommetFactory.getDataFromDb("data01");
         depot = (Depot) this.clients.get(0);
         int i = 1;
@@ -125,12 +134,33 @@ public class Graphe {
         }
         return graph;
     }
-    public static ArrayList<Circuit> generateRandomGraph(String dataset) {
+
+    public static Graph adaptGraphe(Graphe graphe) {
+        Graph graph = new SingleGraph("Graphe");
+        graph.setStrict(false);
+        graph.setAutoCreate(true);
+        SpriteManager sman = new SpriteManager(graph);
+        int h = 1;
+        ArrayList<Circuit> circuits = graphe.getCircuits();
+        for (int i = 0; i < circuits.size(); i++) {
+            for (int j = 0; j < circuits.get(i).getArcs().size(); j++) {
+
+                graph.addEdge(Integer.toString(h), Integer.toString(circuits.get(i).getArcs().get(j).getSommets()[0].getIdSommet()), Integer.toString(circuits.get(i).getArcs().get(j).getSommets()[1].getIdSommet()), true);
+                h++;
+            }
+        }
+        return graph;
+    }
+
+    public static Graphe generateRandomGraph(String dataset) {
+        Graphe graphe = new Graphe();
         int Cmax = 100;
         ArrayList<Circuit> circuits = new ArrayList<Circuit>();
         Map<Integer, Client> clients = SommetFactory.getDataFromDb(dataset);
         Depot depot = (Depot) clients.get(0);
         clients.remove(depot.getIdSommet(), depot);
+        graphe.setDepot(depot);
+        graphe.setClients(clients);
         Circuit circuit = new Circuit();
         HashMap<Integer, Arc> arcs = new HashMap<>();
         int cout = 0;
@@ -162,7 +192,8 @@ public class Graphe {
             i_arc++;
             clients.remove(randomKey, client);
         }
-        return circuits;
+        graphe.setCircuits(circuits);
+        return graphe;
     }
 
     public static void main(String args[]) {

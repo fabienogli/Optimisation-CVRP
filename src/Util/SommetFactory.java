@@ -45,7 +45,6 @@ public class SommetFactory {
                     if (!depotInitialise) {
                         Depot depot = new Depot(coordonnee);
                         depotInitialise = true;
-                        depot.setQuantite(0);
                         sommets.put(depot.getIdSommet(), depot);
                     } else {
                         Client client = new Client(id, coordonnee, quantite);
@@ -63,6 +62,7 @@ public class SommetFactory {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return sommets;
     }
 }
