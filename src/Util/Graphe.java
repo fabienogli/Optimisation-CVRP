@@ -56,7 +56,7 @@ public class Graphe {
         int i = 1;
         int nbClients = this.clients.size() - 1;
         int j = 1;
-        while (i < nbClients || i==nbClients) {
+        while (i <= nbClients ) {
             System.out.println("Circuit " + i);
             int Cmax = 0;
             Circuit circuit = new Circuit();
@@ -67,7 +67,7 @@ public class Graphe {
                 j++;
                 i++;
                 circuit.getClients().add(this.clients.get(i));
-                while ((Cmax + this.clients.get(i).getQuantite()) <= 100 && i != nbClients) {
+                while (i <= nbClients && (Cmax + this.clients.get(i).getQuantite()) <= 100 ) {
                     //  while ((Cmax + this.clients.get(i).getQuantite()) <= 100 ) {
                     Cmax += this.clients.get(i).getQuantite();
                     Arc arc = new Arc(this.clients.get(i - 1), this.clients.get(i));
