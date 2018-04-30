@@ -13,19 +13,7 @@ public class testGraphe {
 //        testGenerateRandomGraph();
 //        testDisplay();
 //        testRandomSwap();
-        //test pour le set sommet
-        Graphe graphe = Graphe.generateRandomGraph("data01");
-        ArrayList<Circuit>circuits = graphe.getCircuits();
-        List<Client> sommets = new ArrayList<>();
-        circuits.stream().forEach(circuit -> {
-            System.out.println("dans un circuit");
-            System.out.println(circuit.getSommets());
-            System.out.println(circuit.getSommets().size());
-            sommets.addAll(circuit.getSommets());
-        });
-        System.out.println("sortie");
-        System.out.println(sommets);
-        System.out.println(sommets.size());
+        testConstructeurAvecSommet();
     }
 
     public static void testGenerateRandomGraph() {
@@ -48,6 +36,15 @@ public class testGraphe {
         Graph graph1 = Graphe.adaptGraphe(swapped);
         graph1.display();
 
+    }
+
+    public static void testConstructeurAvecSommet() {
+        Graphe graphe = Graphe.generateRandomGraph("data01");
+        System.out.println(graphe.equals(graphe));
+        List<Client>  sommets = graphe.getSommets();
+        System.out.println(sommets.size());
+        Graphe ne = new Graphe(sommets, true);
+        System.out.println(graphe.equals(ne));
     }
 
     public static void testDisplay() {

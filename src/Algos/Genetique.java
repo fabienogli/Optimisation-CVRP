@@ -117,7 +117,7 @@ public class Genetique {
         Map<Integer, Client> map = new HashMap<>();
         System.out.println(clients.size());
         for (int i = 0; i < clients.size(); i++) {
-            System.out.println(clients);
+            System.out.println(clients.get(i));
             map.put(i, clients.get(i));
         }
         return map;

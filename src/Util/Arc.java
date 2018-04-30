@@ -47,4 +47,10 @@ public class Arc {
     public String toString() {
         return this.sommets[start].toString() + "----" + this.sommets[end].toString();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        Arc arc = (Arc)obj;
+        return this.sommets[start] == arc.getSommets()[start] && this.sommets[end] == arc.getSommets()[end];
+    }
 }
