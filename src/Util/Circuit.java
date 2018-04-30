@@ -41,4 +41,8 @@ public class Circuit {
     public ArrayList<Client> getSommets() {
         return this.sommets;
     }
+
+    public int getCtotal() {
+        return this.sommets.stream().mapToInt(Client::getQuantite).sum();
+    }
 }

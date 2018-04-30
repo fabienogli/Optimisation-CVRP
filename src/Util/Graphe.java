@@ -95,10 +95,14 @@ public class Graphe {
     }
 
     public static Graphe generateRandomGraph(String dataset) {
-        Graphe graphe = new Graphe();
-        int Cmax = 100;
-        ArrayList<Circuit> circuits = new ArrayList<Circuit>();
         Map<Integer, Client> clients = SommetFactory.getDataFromDb(dataset);
+        return generateRandomGrapheFromSommet(clients);
+    }
+
+    private static Graphe generateRandomGrapheFromSommet(Map<Integer, Client> clients) {
+        int cmax = 100;
+        ArrayList<Circuit> circuits = new ArrayList<Circuit>();
+        Graphe graphe = new Graphe();
         Depot depot = (Depot) clients.get(0);
         clients.remove(depot.getIdSommet(), depot);
         graphe.setDepot(depot);
@@ -114,6 +118,11 @@ public class Graphe {
             List<Integer> keys = new ArrayList<>(clients.keySet());
             int randomKey = keys.get(random.nextInt(keys.size()));
             Client client = clients.get(randomKey);
+            if (client.getIdSommet() == 0) {
+                clients.remove(client);
+                randomKey = keys.get(random.nextInt(keys.size()));
+                client = clients.get(randomKey);
+            }
             if (lastClient == null) {   //C'est un nouveau circuit, on doit l'intialiser
                 circuit = new Circuit();
                 arcs = new HashMap<>();
@@ -121,7 +130,7 @@ public class Graphe {
                 i_arc = 0;
                 lastClient = depot;
             }
-            if (client.getQuantite() + cout >= Cmax && lastClient != null) {
+            if (client.getQuantite() + cout >= cmax && lastClient != null) {
                 arcs.put(i_arc, new Arc(lastClient, depot));
                 circuit.setArcs(arcs);
                 circuits.add(circuit);
