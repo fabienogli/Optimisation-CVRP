@@ -17,12 +17,13 @@ public class Circuit {
     public void setArcs(HashMap<Integer, Arc> arcs) {
         this.arcs = arcs;
         this.arcs.entrySet().stream().forEach(integerArcEntry -> {
-            this.sommets.add((Client)integerArcEntry.getValue().getSommets()[0]);
+            this.sommets.add((Client)integerArcEntry.getValue().getSommets()[Arc.start]);
         });
     }
 
     public Circuit() {
         this.arcs = new HashMap<>();
+        this.sommets = new ArrayList<>();
     }
 
     public Circuit(HashMap<Integer, Arc> arcs) {

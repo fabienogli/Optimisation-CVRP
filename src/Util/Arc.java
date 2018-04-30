@@ -42,4 +42,9 @@ public class Arc {
         }
         return 0;
     }
+
+    @Override
+    public String toString() {
+        return this.sommets[start].toString() + "----" + this.sommets[end].toString();
+    }
 }

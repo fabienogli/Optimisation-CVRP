@@ -2,7 +2,7 @@ package Algos;
 
 import Util.Graphe;
 import org.graphstream.graph.Graph;
-
+import Util.Client;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -60,8 +60,19 @@ public class Genetique {
         return kiddo;
     }
 
-    public Graphe crossover(Graphe first, Graphe second) {
-        Graphe kid = new Graphe();
+    public Graphe crossover(Graphe first, Graphe second, int indice) {
+        ArrayList<Client> list2 =  second.getSommets();
+        ArrayList<Client> list1 =  first.getSommets();
+        if (list1.size() <= indice) {
+            return null;
+        }
+        //enfant de la première liste
+        List<Client> child_11 = list1.subList(0, indice);
+        List<Client> child_12 = list1.subList(indice + 1 , list1.size());
+        //enfant de la première liste
+        List<Client> child_21 = list1.subList(0, indice);
+        List<Client> child_22 = list1.subList(indice + 1 , list1.size());
+
 
         return kid;
     }
