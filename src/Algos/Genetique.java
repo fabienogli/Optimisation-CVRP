@@ -97,27 +97,26 @@ public class Genetique {
         return result;
     }
 
-    private static void extractDoublon(Map<Integer, Client> child_2, HashMap<Integer, Client> missing_child1) {
-        for (int i = 0; i < child_2.size(); i++) {
-            Client client = child_2.get(i);
+    public static void extractDoublon(Map<Integer, Client> child, Map<Integer, Client> missing_child1) {
+        for (int i = 0; i < child.size(); i++) {
+            Client client = child.get(i);
             if (client.getIdSommet() == 0) {
                 continue;
             }
-            for (int j = i + 1; j < child_2.size(); j++) {
-                Client toCompare = child_2.get(j);
+            for (int j = i + 1; j < child.size(); j++) {
+                Client toCompare = child.get(j);
                 if (client.equals(toCompare)) {
                     missing_child1.put(j,toCompare);
-                    child_2.remove(toCompare);
                 }
             }
+
         }
+        missing_child1.forEach((key, value) -> child.remove(key, value));
     }
 
     public static Map<Integer, Client> convertListToMapPosition(List<Client> clients) {
         Map<Integer, Client> map = new HashMap<>();
-        System.out.println(clients.size());
         for (int i = 0; i < clients.size(); i++) {
-            System.out.println(clients.get(i));
             map.put(i, clients.get(i));
         }
         return map;
