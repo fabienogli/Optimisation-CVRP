@@ -1,10 +1,14 @@
 package Util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 public class Circuit {
+
+    private ArrayList<Client> sommets;
+    private HashMap<Integer, Arc> arcs;
 
     public HashMap<Integer, Arc> getArcs() {
         return arcs;
@@ -12,16 +16,17 @@ public class Circuit {
 
     public void setArcs(HashMap<Integer, Arc> arcs) {
         this.arcs = arcs;
+        this.arcs.entrySet().stream().forEach(integerArcEntry -> {
+            this.sommets.add((Client)integerArcEntry.getValue().getSommets()[0]);
+        });
     }
-
-    private HashMap<Integer, Arc> arcs;
 
     public Circuit() {
         this.arcs = new HashMap<>();
     }
 
     public Circuit(HashMap<Integer, Arc> arcs) {
-        this.arcs = arcs;
+        setArcs(arcs);
     }
 
     public double cout() {
@@ -30,5 +35,9 @@ public class Circuit {
 
     public double getLongueur() {
         return this.arcs.size();
+    }
+
+    public ArrayList<Client> getSommets() {
+        return this.sommets;
     }
 }

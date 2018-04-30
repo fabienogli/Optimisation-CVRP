@@ -182,4 +182,27 @@ public class Graphe {
     public void setCircuits(ArrayList<Circuit> circuits) {
         this.circuits = circuits;
     }
+
+    public ArrayList<Client> getSommets() {
+        ArrayList<Client> sommets = new ArrayList<>();
+        return sommets;
+    }
+
+    public Graphe(ArrayList<Client> sommets) {
+        Depot depot = (Depot) sommets.get(0);
+        if (depot.getIdSommet() != 0) {
+            return;
+        }
+        sommets.remove(depot);
+        Circuit circuit = new Circuit();
+        HashMap<Integer, Arc> arcs = new HashMap<>();
+        for (Sommet sommet : sommets) {
+            if (sommet.getIdSommet() == 0) {
+                circuit.setArcs(arcs);
+                this.circuits.add(circuit);
+                circuit = new Circuit();
+                arcs = new HashMap<>();
+            }
+        }
+    }
 }
