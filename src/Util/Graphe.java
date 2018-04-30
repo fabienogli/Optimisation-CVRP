@@ -225,7 +225,7 @@ public class Graphe {
 
     public static void main(String args[]) {
         Graphe graphe = new Graphe("data02");
-        Graphe graphe1 = RecuitSimule.generateRandomNeighbors(graphe);
+        Graphe graphe1 = generateRandomGrapheFromSommet(graphe.getClients());
         /*Graph graph = new MultiGraph("Tutorial 1");
         SpriteManager sman = new SpriteManager(graph);
         graph.addNode("C");

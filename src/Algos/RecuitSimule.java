@@ -52,6 +52,7 @@ public class RecuitSimule {
         //pour les arcs ajacents on update les extremités;
         int arcAdjacent1=circuits.get(circuitAlea1).getArcs().get(arcAlea1).getArcAdjacent1();
         int arcAdjacent2=circuits.get(circuitAlea1).getArcs().get(arcAlea1).getArcAdjacent2();
+        //TODO pour les arcs adjacents =0,on fait rien et modifier aussi pour l'autre circuit
         Client sommet1= (Client)circuits.get(circuitAlea1).getArcs().get(arcAdjacent1).getSommets()[0];
         Client sommet2= (Client)circuits.get(circuitAlea1).getArcs().get(arcAdjacent2).getSommets()[1];
         Client sommet3= (Client)circuits.get(circuitAlea1).getArcs().get(arcAdjacent1).getSommets()[0];
