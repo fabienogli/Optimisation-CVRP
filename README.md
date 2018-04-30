@@ -52,3 +52,10 @@ faire une liste des sommets dans l'ordre pour un circuit -> codage d'un graphe
 - a chaque circuit, le pété à un endroit
  combiner les circuit dans un graph de sorte à avoir tous les sommets
  S'ils n'y sont pas tous: les rajouter manuellement
+ - liste de sommets pour les circuits
+ on fait donc une liste de sommets pour les graphes
+ on les coupes et les mélanges
+ 
+ ###mutation
+ on prend aleatoirement deux sommets
+ On tire une petit proba qui déterminera si on doit échanger ou non les sommets

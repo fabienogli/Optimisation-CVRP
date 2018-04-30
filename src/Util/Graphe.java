@@ -10,6 +10,8 @@ import org.graphstream.ui.view.Viewer;
 import scala.Int;
 
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class Graphe {
 
@@ -39,6 +41,7 @@ public class Graphe {
         this.circuits = circuits;
     }
 
+    private ArrayList<Client> sommets;
     private Map<Integer, Client> clients;
     private ArrayList<Circuit> circuits;
 
@@ -48,6 +51,7 @@ public class Graphe {
 
     public Graphe(ArrayList<Circuit> circuits) {
         this.circuits = circuits;
+        this.setSommets((ArrayList) circuits.stream().map(Circuit::getSommets).collect(Collectors.toList()));
     }
 
     public Graphe(String dataset) {
@@ -193,6 +197,7 @@ public class Graphe {
             }
             if (client.getQuantite() + cout >= Cmax && lastClient != null) {
                 arcs.put(i_arc, new Arc(lastClient, depot));
+
                 circuit.setArcs(arcs);
                 circuits.add(circuit);
                 lastClient = null;
@@ -205,6 +210,7 @@ public class Graphe {
             clients.remove(randomKey, client);
         }
         graphe.setCircuits(circuits);
+        graphe.setSommets((ArrayList) circuits.stream().map(Circuit::getSommets).collect(Collectors.toList()));
         return graphe;
     }
 
@@ -230,5 +236,41 @@ public class Graphe {
 
     public double cout() {
         return circuits.stream().mapToDouble(Circuit::cout).sum();
+    }
+
+    public ArrayList<Client> getSommets() {
+        return this.sommets;
+    }
+
+    public Graphe(ArrayList<Client> sommets, boolean test) {    //Pour pouvoir faire un constructeur avec les sommets
+        this.sommets = sommets;
+        Depot depot = (Depot) sommets.get(0);
+        if (depot.getIdSommet() != 0) {
+            return;
+        }
+        sommets.remove(depot);
+        Circuit circuit = new Circuit();
+        Client lastSommet = depot;
+        int i_arc = 0;
+        HashMap<Integer, Arc> arcs = new HashMap<>();
+        for (Client sommet : sommets) {
+            if (sommet.getIdSommet() == 0) {
+                arcs.put(i_arc, new Arc(lastSommet, depot));
+                circuit.setArcs(arcs);
+                this.circuits.add(circuit);
+                circuit = new Circuit();
+                arcs = new HashMap<>();
+                lastSommet = depot;
+                i_arc = 0;
+                continue;
+            }
+            lastSommet = sommet;
+            arcs.put(i_arc, new Arc(lastSommet, sommet));
+            i_arc++;
+        }
+    }
+
+    public void setSommets(ArrayList<Client> sommets) {
+        this.sommets = sommets;
     }
 }
