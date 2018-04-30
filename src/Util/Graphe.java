@@ -1,5 +1,6 @@
 package Util;
 
+import Algos.RecuitSimule;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
@@ -64,6 +65,8 @@ public class Graphe {
             if (i < nbClients) {
                 Arc arc1 = new Arc(this.clients.get(0), this.clients.get(i));
                 arcs.put(j, arc1);
+                arc1.setArcAdjacent1(0);
+                arc1.setArcAdjacent2(j+1);
                 j++;
                 circuit.getClients().add(this.clients.get(i));
                 Cmax = this.clients.get(i).getQuantite();
@@ -73,6 +76,8 @@ public class Graphe {
                     Cmax += this.clients.get(i).getQuantite();
                     Arc arc = new Arc(this.clients.get(i - 1), this.clients.get(i));
                     arcs.put(j, arc);
+                    arc1.setArcAdjacent1(j-1);
+                    if(i<nbClients) arc1.setArcAdjacent2(j+1);
                     j++;
                     circuit.getClients().add(this.clients.get(i));
                     i++;
@@ -80,7 +85,10 @@ public class Graphe {
                 }
                 Arc arc2 = new Arc(this.clients.get(i - 1), this.clients.get(0));
                 arcs.put(j, arc2);
+                arc2.setArcAdjacent1(j-1);
+                arc2.setArcAdjacent2(0);
                 j++;
+
             } else if (i == nbClients) {
                 Arc arc1 = new Arc(this.clients.get(0), this.clients.get(i));
                 arcs.put(j, arc1);
@@ -88,8 +96,10 @@ public class Graphe {
                 Arc arc2 = new Arc(this.clients.get(i), this.clients.get(0));
                 arcs.put(j, arc2);
                 j++;
-                i++;//pour sortir
                 circuit.getClients().add(this.clients.get(i));
+                this.clients.get(i).setSommetAdjacent1(0);
+                this.clients.get(i).setSommetAdjacent2(0);
+                i++;//pour sortir
             }
             circuit.setArcs(arcs);
             circuits.add(circuit);
@@ -200,6 +210,7 @@ public class Graphe {
 
     public static void main(String args[]) {
         Graphe graphe = new Graphe("data02");
+        Graphe graphe1 = RecuitSimule.generateRandomNeighbors(graphe);
         /*Graph graph = new MultiGraph("Tutorial 1");
         SpriteManager sman = new SpriteManager(graph);
         graph.addNode("C");
@@ -211,8 +222,10 @@ public class Graphe {
         graph.addEdge("BC", "B", "C");
 
         graph.display();*/
+        Graph graphe11 = graphe1.adaptGraphe();
         Graph graph = graphe.adaptGraphe();
-        graph.display();
+        graphe11.display();
+        //graph.display();
     }
 
     public double cout() {

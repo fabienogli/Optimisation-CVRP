@@ -6,6 +6,25 @@ abstract class Sommet {
     private int idSommet;
     private Coordonnee coordonnee;
 
+    public int getSommetAdjacent1() {
+        return sommetAdjacent1;
+    }
+
+    public void setSommetAdjacent1(int sommetAdjacent1) {
+        this.sommetAdjacent1 = sommetAdjacent1;
+    }
+
+    public int getSommetAdjacent2() {
+        return sommetAdjacent2;
+    }
+
+    public void setSommetAdjacent2(int sommetAdjacent2) {
+        this.sommetAdjacent2 = sommetAdjacent2;
+    }
+
+    public int sommetAdjacent1;
+    public int sommetAdjacent2;
+
     public Sommet() {
     }
 
@@ -32,7 +51,9 @@ abstract class Sommet {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o){ return true;}
+        if (this == o) {
+            return true;
+        }
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
