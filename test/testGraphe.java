@@ -10,6 +10,7 @@ public class testGraphe {
     public static void main(String[] args) {
 //        littleTestRandom();
 //        testGenerateRandomGraph();
+        testDisplay();
     }
 
     public static void testGenerateRandomGraph() {
@@ -18,6 +19,12 @@ public class testGraphe {
             System.out.println("cout de circuit: " + circuit.cout());
         });
         System.out.println("cout du graphe" + graphe.cout());
+    }
+
+    public static void testDisplay() {
+        Graphe graphe = Graphe.generateRandomGraph("data01");
+        Graph graph = Graphe.adaptGraphe(graphe);
+        graph.display();
     }
 
 
