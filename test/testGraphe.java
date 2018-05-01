@@ -1,16 +1,19 @@
-import Algos.Genetique;
 import Util.Circuit;
 import Util.Graphe;
+import Util.Client;
 import org.graphstream.graph.Graph;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class testGraphe {
 
     public static void main(String[] args) {
 //        littleTestRandom();
 //        testGenerateRandomGraph();
-        testDisplay();
+//        testDisplay();
+//        testRandomSwap();
+        testConstructeurAvecSommet();
     }
 
     public static void testGenerateRandomGraph() {
@@ -19,6 +22,33 @@ public class testGraphe {
             System.out.println("cout de circuit: " + circuit.cout());
         });
         System.out.println("cout du graphe" + graphe.cout());
+    }
+    public static void testRandomSwap() {
+        Graphe graphe = Graphe.generateRandomGraph("data01");
+        graphe.getCircuits().stream().forEach(circuit -> {
+            System.out.println("cout de circuit: " + circuit.cout());
+        });
+        System.out.println("cout du graphe" + graphe.cout());
+        Graphe swapped = Graphe.swapRandomSommet(graphe);
+        System.out.println(graphe.cout());
+        Graph graph = Graphe.adaptGraphe(graphe);
+        graph.display();
+        Graph graph1 = Graphe.adaptGraphe(swapped);
+        graph1.display();
+
+    }
+
+    public static void testConstructeurAvecSommet() {
+        Graphe graphe = Graphe.generateRandomGraph("data01");
+        System.out.println(graphe.equals(graphe));
+        List<Client>  sommets = graphe.getSommets();
+        System.out.println(sommets.size());
+        Graphe ne = new Graphe(sommets);
+        System.out.println(graphe.equals(ne));
+        Graph visu1 = Graphe.adaptGraphe(graphe);
+        Graph visu2 = Graphe.adaptGraphe(ne);
+        visu1.display();
+        visu2.display();
     }
 
     public static void testDisplay() {

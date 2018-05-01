@@ -1,6 +1,7 @@
 package Util;
 
 import Algos.RecuitSimule;
+import Algos.Genetique;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
@@ -16,32 +17,7 @@ import java.util.stream.Collectors;
 public class Graphe {
 
     private Depot depot;
-
-    public Depot getDepot() {
-        return depot;
-    }
-
-    public void setDepot(Depot depot) {
-        this.depot = depot;
-    }
-
-    public Map<Integer, Client> getClients() {
-        return clients;
-    }
-
-    public void setClients(Map<Integer, Client> clients) {
-        this.clients = clients;
-    }
-
-    public ArrayList<Circuit> getCircuits() {
-        return circuits;
-    }
-
-    public void setCircuits(ArrayList<Circuit> circuits) {
-        this.circuits = circuits;
-    }
-
-    private ArrayList<Client> sommets;
+    private List<Client> sommets;
     private Map<Integer, Client> clients;
     private ArrayList<Circuit> circuits;
 
@@ -49,9 +25,36 @@ public class Graphe {
         circuits = new ArrayList<>();
     }
 
-    public Graphe(ArrayList<Circuit> circuits) {
-        this.circuits = circuits;
-        this.setSommets((ArrayList) circuits.stream().map(Circuit::getSommets).collect(Collectors.toList()));
+    public Graphe(List<Client> sommets) {    //Pour pouvoir faire un constructeur avec les sommets
+        this.sommets = sommets;
+        this.circuits = new ArrayList<>();
+        Depot depot = (Depot) sommets.get(0);
+        if (depot.getIdSommet() != 0) {
+            return;
+        }
+        sommets.remove(depot);
+        Circuit circuit = new Circuit();
+        Client lastSommet = depot;
+        int i_arc = 0;
+        HashMap<Integer, Arc> arcs = new HashMap<>();
+        for (Client sommet : sommets) {
+            if (sommet.getIdSommet() == 0) {
+                arcs.put(i_arc, new Arc(lastSommet, depot));
+                circuit.setArcs(arcs);
+                this.circuits.add(circuit);
+                circuit = new Circuit();
+                arcs = new HashMap<>();
+                lastSommet = depot;
+                i_arc = 0;
+                continue;
+            }
+            arcs.put(i_arc, new Arc(lastSommet, sommet));
+            lastSommet = sommet;
+            i_arc++;
+        }
+        arcs.put(i_arc, new Arc(lastSommet, depot));
+        circuit.setArcs(arcs);
+        this.circuits.add(circuit);
     }
 
     public Graphe(String dataset) {
@@ -135,22 +138,6 @@ public class Graphe {
         return graph;
     }
 
-    public static Graph adaptGraphe(ArrayList<Circuit> circuits) {
-        Graph graph = new SingleGraph("Graphe");
-        graph.setStrict(false);
-        graph.setAutoCreate(true);
-        SpriteManager sman = new SpriteManager(graph);
-        int h = 1;
-        for (int i = 0; i < circuits.size(); i++) {
-            for (int j = 0; j < circuits.get(i).getArcs().size(); j++) {
-
-                graph.addEdge(Integer.toString(h), Integer.toString(circuits.get(i).getArcs().get(j).getSommets()[0].getIdSommet()), Integer.toString(circuits.get(i).getArcs().get(j).getSommets()[1].getIdSommet()), true);
-                h++;
-            }
-        }
-        return graph;
-    }
-
     public static Graph adaptGraphe(Graphe graphe) {
         Graph graph = new SingleGraph("Graphe");
         graph.setStrict(false);
@@ -165,6 +152,9 @@ public class Graphe {
                 h++;
             }
         }
+        graph.getNodeSet().forEach(node -> {
+            node.addAttribute("ui.label", node.getId());
+        });
         return graph;
     }
 
@@ -193,7 +183,7 @@ public class Graphe {
             int randomKey = keys.get(random.nextInt(keys.size()));
             Client client = clients.get(randomKey);
             if (client.getIdSommet() == 0) {
-                clients.remove(client);
+                clients.remove(randomKey, client);
                 randomKey = keys.get(random.nextInt(keys.size()));
                 client = clients.get(randomKey);
             }
@@ -214,15 +204,58 @@ public class Graphe {
                 arcs.put(i_arc, new Arc(lastClient, client));
                 cout += client.getQuantite();
                 lastClient = client;
+                clients.remove(randomKey, client);
             }
             i_arc++;
-            clients.remove(randomKey, client);
         }
         graphe.setCircuits(circuits);
-        graphe.setSommets((ArrayList) circuits.stream().map(Circuit::getSommets).collect(Collectors.toList()));
+        List<Client> sommets = new ArrayList<>();
+        circuits.stream().forEach(circ -> {
+            sommets.addAll(circ.getSommets());
+        });
+        graphe.setSommets((ArrayList)sommets);
         return graphe;
     }
 
+    public static Graphe swapRandomSommet(Graphe graphe) {
+        Map<Integer, Client> map = Genetique.convertListToMapPosition(graphe.getSommets());
+        Random random = new Random();
+        List<Integer> keys = new ArrayList<>(map.keySet());
+        int firstRandomKey = keys.get(random.nextInt(keys.size()));
+        int secondRandomKey =  keys.get(random.nextInt(keys.size()));
+        System.out.println(map.get(firstRandomKey));
+        while (map.get(firstRandomKey).getIdSommet() == 0) {
+            firstRandomKey = keys.get(random.nextInt(keys.size()));
+        }
+        while (map.get(secondRandomKey).getIdSommet() == 0 || secondRandomKey == firstRandomKey) {
+            secondRandomKey = keys.get(random.nextInt(keys.size()));
+        }
+        Client toSwap = map.get(firstRandomKey);
+        Client toSwap1 = map.get(secondRandomKey);
+        map.remove(toSwap);
+        map.remove(toSwap1);
+        map.put(secondRandomKey, toSwap);
+        map.put(firstRandomKey, toSwap1);
+        System.out.println(map.values().stream().collect(Collectors.toList()));
+        return new Graphe(map.values().stream().collect(Collectors.toList()));
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        ArrayList<Circuit> circuits = ((Graphe) obj).getCircuits();
+        if (circuits.size() != this.circuits.size()) {
+            System.out.println("Les deux graphes ont des tailles différentes:");
+            System.out.println(this.circuits.size() +" et " + circuits.size());
+            return false;
+        }
+        for (int i = 0; i < this.circuits.size(); i++) {
+            if (! circuits.get(i).equals(this.circuits.get(i))) {
+                System.out.println("le circuit numero "+ i + " est different");
+                return false;
+            }
+        }
+        return true;
+    }
     public static void main(String args[]) {
         Graphe graphe = new Graphe("data02");
         Graphe graphe1 = generateRandomGrapheFromSommet(graphe.getClients());
@@ -232,54 +265,46 @@ public class Graphe {
         graph.addNode("A");
         graph.addNode("B");
 
-        graph.addEdge("AB", "A", "B");
-        graph.addEdge("CA", "C", "A");
-        graph.addEdge("BC", "B", "C");
+    /**
+     * Getteur et Setteur
+     */
 
-        graph.display();*/
-        Graph graphe11 = graphe1.adaptGraphe();
-        Graph graph = graphe.adaptGraphe();
-        graphe11.display();
-        //graph.display();
+    public Depot getDepot() {
+        return depot;
     }
 
-    public double cout() {
-        return circuits.stream().mapToDouble(Circuit::cout).sum();
+    public void setDepot(Depot depot) {
+        this.depot = depot;
     }
 
-    public ArrayList<Client> getSommets() {
-        return this.sommets;
+    public Map<Integer, Client> getClients() {
+        return clients;
     }
 
-    public Graphe(ArrayList<Client> sommets, boolean test) {    //Pour pouvoir faire un constructeur avec les sommets
-        this.sommets = sommets;
-        Depot depot = (Depot) sommets.get(0);
-        if (depot.getIdSommet() != 0) {
-            return;
-        }
-        sommets.remove(depot);
-        Circuit circuit = new Circuit();
-        Client lastSommet = depot;
-        int i_arc = 0;
-        HashMap<Integer, Arc> arcs = new HashMap<>();
-        for (Client sommet : sommets) {
-            if (sommet.getIdSommet() == 0) {
-                arcs.put(i_arc, new Arc(lastSommet, depot));
-                circuit.setArcs(arcs);
-                this.circuits.add(circuit);
-                circuit = new Circuit();
-                arcs = new HashMap<>();
-                lastSommet = depot;
-                i_arc = 0;
-                continue;
-            }
-            lastSommet = sommet;
-            arcs.put(i_arc, new Arc(lastSommet, sommet));
-            i_arc++;
-        }
+    public void setClients(Map<Integer, Client> clients) {
+        this.clients = clients;
+    }
+
+    public ArrayList<Circuit> getCircuits() {
+        return circuits;
+    }
+
+    public void setCircuits(ArrayList<Circuit> circuits) {
+        this.circuits = circuits;
     }
 
     public void setSommets(ArrayList<Client> sommets) {
         this.sommets = sommets;
+    }
+    public double cout() {
+        return circuits.stream().mapToDouble(Circuit::cout).sum();
+    }
+
+    public int getCtotal() {
+        return this.circuits.stream().mapToInt(Circuit::getC).max().orElse(-1);
+    }
+
+    public List<Client> getSommets() {
+        return this.sommets;
     }
 }
