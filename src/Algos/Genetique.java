@@ -33,7 +33,6 @@ public class Genetique {
         List<Graphe> populationBis = new ArrayList<>();
         Double minCout = -1.0;
         Graphe minGraph = null;
-        int gen = 0;
         for (int i = 0; i < nbPopulation; i++) {
             //Initialisation de POP
             Graphe graphe = Graphe.generateRandomGraph(dataset);
@@ -42,33 +41,39 @@ public class Genetique {
                 minCout = graphe.cout();
                 minGraph = graphe;
             }
+            population.add(graphe);
         }
-        while (gen != nbGen) {
+        System.out.println(minCout+ " " + minGraph);
+        for (int gen = 0; gen < nbGen; gen++) {
             System.out.println("la fitness = "+ minCout);
-            while (populationBis.size() != population.size()) {
+            while (populationBis.size() <= population.size()) {
                 //Phase de reproduction
                 List<Graphe> popReproduite = reproduction(population);
                 //Phase de croisement
                 List<Graphe> children = new ArrayList<>();
                 for (int i = 0; i < popReproduite.size()-1; i += 2) {
-                    children.add(crossover(popReproduite.get(i), popReproduite.get(i + 1), popReproduite.size() / 2));
+                    children.add(crossover(popReproduite.get(i), popReproduite.get(i + 1), popReproduite.get(i).getSommets().size() / 2));
                 }
                 //Phase de mutation
-                for (int i = 0; i < children.size(); i++) {
-                    populationBis.add(mutation(children.get(i), probaMutation));
-                }
+                populationBis.addAll(children);
+//                for (int i = 0; i < children.size(); i++) {
+//                    populationBis.add(mutation(children.get(i), probaMutation));
+//                }
+
             }
-            if (populationBis.stream().mapToDouble(Graphe::cout).max().orElse(-1.0) < population.stream().mapToDouble(Graphe::cout).max().orElse(-1.0)) {
+//            System.out.println(population.size());
+//            System.out.println(populationBis.size());
+            if (populationBis != null) {
                 population = populationBis;
-                populationBis.clear();
+                populationBis = new ArrayList<>();
             }
             evaluatePop(minCout, minGraph, population);
-            gen++;
         }
         return minGraph;
     }
 
     public static void evaluatePop(Double minCout, Graphe minGraph, List<Graphe> graphes) {
+        System.out.println(graphes);
         for (Graphe graphe : graphes) {
             if (minGraph == null || minCout > graphe.cout()) {
                 minCout = graphe.cout();
@@ -93,7 +98,7 @@ public class Genetique {
             double result =1 / (graphe.cout() *sum);
             freq.put(integer, result);
         });
-        System.out.println(freq);
+//        System.out.println(freq);
 
         Random _random = new Random();
         for (int i = 1; i <= graphes.size(); i++) {
@@ -114,8 +119,6 @@ public class Genetique {
             }
             kiddo.put(i, graphes.get(result.getKey()));
         }
-        System.out.println("la reproduction donne");
-        System.out.println(new ArrayList<>(kiddo.values()));
         return new ArrayList<>(kiddo.values());
     }
 
@@ -125,13 +128,17 @@ public class Genetique {
 //        System.out.println("taille de la mere:" + mom.size());
 //        System.out.println("taille du pere:" + dad.size());
         if (mom.size() <= indice) {
-            return null;
+            System.out.println("mom size: "+mom.size() + " < indice:" + indice );
+            return first;
         }
 //        System.out.println("indice= " + indice);
 //        System.out.println("valeur qui séprare mere " + mom.get(indice));
 //        System.out.println("mom :");
 //        mom.forEach(System.out::println);
 //        System.out.println("valeur qui séprare pere " + dad.get(indice));
+        while (dad.get(indice).getIdSommet() == 0 || mom.get(indice).getIdSommet() == 0) {
+            indice++;
+        }
 //        System.out.println("dad :");
 //        dad.forEach(System.out::println);
         //enfant de la première liste
@@ -160,25 +167,50 @@ public class Genetique {
         graphe.isValid();
         graphe2.isValid();
         if (graphe.cout() > graphe2.cout()) {
-            System.out.println(" on a choisi child 2");
+//            System.out.println(" on a choisi child 2");
             return graphe2;
         }
-        System.out.println(" on a choisi child 1");
+//        System.out.println(" on a choisi child 1");
         return graphe;
     }
 
     public static List<Map<Integer, Client>> rearangeChild(Map<Integer, Client> child_1, Map<Integer, Client> child_2) {
         List<Map<Integer, Client>> result = new ArrayList<>();
-        System.out.println("child 2");
+//        System.out.println("child 2");
         Map<Integer, Client> missing_child1 = extractDoublon(child_2);
-        System.out.println("child 1");
+//        System.out.println("child 1");
         Map<Integer, Client> missing_child2 = extractDoublon(child_1);
+//        System.out.println(missing_child1.size());
+//        System.out.println(missing_child2.size());
+//        System.out.println("missing_child1");
+//        missing_child1.forEach((key, value) -> {
+//            System.out.println(key +" : " + value.getIdSommet());
+//        });
+//        System.out.println("missing_child2");
+//        missing_child2.forEach((key, value) -> {
+//            System.out.println(key +" : " + value.getIdSommet());
+//        });
+//        System.out.println("chil1"+ child_1.size());
+//        child_1.forEach((key, value) -> {
+//            System.out.println(key +" : " + value.getIdSommet());
+//        });
+//        System.out.println("chil2 de taille " + child_2.size());
+//        child_2.forEach((key, value) -> {
+//            System.out.println(key +" : " + value.getIdSommet());
+//        });
         missing_child1.forEach((key, value) -> {
-            Map.Entry<Integer, Client> entry = missing_child2.entrySet().iterator().next();
-            child_1.put(entry.getKey(), value);
-            child_2.put(key, entry.getValue());
-            missing_child2.remove(entry.getKey(), entry.getValue());
+            if (missing_child2.isEmpty()) {
+                child_1.put(child_1.size(), value);
+            } else {
+                Map.Entry<Integer, Client> entry = missing_child2.entrySet().iterator().next();
+                child_1.put(entry.getKey(), value);
+                child_2.put(key, entry.getValue());
+                missing_child2.remove(entry.getKey(), entry.getValue());
+            }
         });
+        if (!missing_child2.isEmpty()) {
+            child_2.put(child_2.size(), missing_child2.entrySet().iterator().next().getValue());
+        }
         result.add(0, child_1);
         result.add(1, child_2);
         return result;
@@ -186,7 +218,7 @@ public class Genetique {
 
     public static Map<Integer, Client> extractDoublon(Map<Integer, Client> child) {
         Map<Integer, Client> missing_child1 = new HashMap<>();
-        System.out.println("taille=" +child.size());
+//        System.out.println("taille=" +child.size());
         int size = child.size();
         for (int i = 0; i < size; i++) {
             Client client = child.get(i);

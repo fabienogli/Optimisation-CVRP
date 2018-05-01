@@ -16,8 +16,11 @@ public class testGenetique {
 //        testReproduction(4);
 //        testRearangeChildren();
 //        testExtractDoublon();
-        testCrossover();
-//        testAlgoGenetique();
+//        for (int i = 0; i < 500; i++) {
+//
+//            testCrossover();
+//        }
+        testAlgoGenetique();
     }
 
     public static void littleTestRandom() {
@@ -160,14 +163,14 @@ public class testGenetique {
         Graph visu1 = Graphe.adaptGraphe(graphe1);
         Graph visu2 = Graphe.adaptGraphe(graphe2);
         Graph visuResult = Graphe.adaptGraphe(result);
-        visu1.display();
-        visu2.display();
-        visuResult.display();
+//        visu1.display();
+//        visu2.display();
+//        visuResult.display();
     }
 
     public static void testAlgoGenetique() {
-        Graphe graphe = Genetique.algo(8, 5, "data01", 0.05);
-        System.out.println(graphe.cout());
+        Graphe graphe = Genetique.algo(150, 100, "data01", 0.05);
+        System.out.println("Le cout final est " + graphe.cout());
         Graph graph = Graphe.adaptGraphe(graphe);
         graph.display();
     }
