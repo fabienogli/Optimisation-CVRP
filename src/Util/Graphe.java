@@ -200,7 +200,6 @@ public class Graphe {
         int cout = 0;
         Client lastClient = depot;
         int i_arc = 0;
-        lastClient = depot;
 
         while (!clients.isEmpty()) {
             Random random = new Random();
