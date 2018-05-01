@@ -53,7 +53,7 @@ public class Circuit {
         return this.sommets;
     }
 
-    public int getCtotal() {
+    public int getC() {
         return this.sommets.stream().mapToInt(Client::getQuantite).sum();
     }
 

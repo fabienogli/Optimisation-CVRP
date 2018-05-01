@@ -62,7 +62,7 @@ public class Genetique {
         return kiddo;
     }
 
-    public Graphe crossover(Graphe first, Graphe second, int indice) {
+    public static Graphe crossover(Graphe first, Graphe second, int indice) {
         List<Client> list2 =  second.getSommets();
         List<Client> list1 =  first.getSommets();
         if (list1.size() <= indice) {
@@ -71,13 +71,17 @@ public class Genetique {
         //enfant de la première liste
         List<Client> child_1 = list1.subList(0, indice);
         List<Client> child_2 = list2.subList(0, indice);
-        child_1.addAll(list2.subList(indice + 1 , list1.size()));
+        child_1.addAll(list2.subList(indice + 1 , list2.size()));
         child_2.addAll(list1.subList(indice + 1 , list1.size()));
         List<Map<Integer, Client>> rearangeChildren = rearangeChild(convertListToMapPosition(child_1), convertListToMapPosition(child_2));
-//        child_1 = rearangeChildren.get(0).values();
-//        child_2 = rearangeChildren.get(1);
-        Graphe graphe = new Graphe((ArrayList)child_1, true);
-        Graphe graphe2 = new Graphe((ArrayList)child_2, true);
+        child_1 = rearangeChildren.get(0).values().stream().collect(Collectors.toList());
+        child_2 = rearangeChildren.get(1).values().stream().collect(Collectors.toList());
+        System.out.println(child_1);
+        System.out.println(child_2);
+        Graphe graphe = new Graphe(child_1, true);
+        Graphe graphe2 = new Graphe(child_2, true);
+        System.out.println(graphe.getCtotal());
+        System.out.println(graphe2.getCtotal());
         if (graphe.cout() > graphe2.cout()) {
             return graphe2;
         }
@@ -91,7 +95,7 @@ public class Genetique {
         extractDoublon(child_1, missing_child2);
         extractDoublon(child_2, missing_child1);
         missing_child1.forEach(child_1::put);
-        missing_child1.forEach(child_2::put);
+        missing_child2.forEach(child_2::put);
         result.add(0, child_1);
         result.add(1, child_2);
         return result;

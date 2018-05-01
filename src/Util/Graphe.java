@@ -166,6 +166,9 @@ public class Graphe {
                 h++;
             }
         }
+        graph.getNodeSet().forEach(node -> {
+            node.addAttribute("ui.label", node.getId());
+        });
         return graph;
     }
 
@@ -251,6 +254,10 @@ public class Graphe {
 
     public double cout() {
         return circuits.stream().mapToDouble(Circuit::cout).sum();
+    }
+
+    public int getCtotal() {
+        return this.circuits.stream().mapToInt(Circuit::getC).max().orElse(-1);
     }
 
     public List<Client> getSommets() {

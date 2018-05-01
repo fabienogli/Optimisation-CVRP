@@ -4,6 +4,7 @@ import Algos.Genetique;
 import Util.Coordonnee;
 import Util.Graphe;
 import Util.Client;
+import org.graphstream.graph.Graph;
 import scala.Int;
 
 import javax.swing.text.html.Option;
@@ -17,8 +18,9 @@ public class testGenetique {
     public static void main(String[] args) {
 //        littleTestRandom();
 //        testReproduction(4);
-        testRearangeChildren();
+//        testRearangeChildren();
 //        testExtractDoublon();
+        testCrossover();
     }
 
     public static void littleTestRandom() {
@@ -145,5 +147,17 @@ public class testGenetique {
         missingChild.forEach((key, value) -> {
             System.out.println("valeur manquante à la " + key + "position = " + value.getIdSommet());
         });
+    }
+
+    public static void testCrossover() {
+        Graphe graphe1 = Graphe.generateRandomGraph("data01");
+        Graphe graphe2 = Graphe.generateRandomGraph("data01");
+        Graphe result = Genetique.crossover(graphe1, graphe2, graphe1.getSommets().size() / 2);
+        Graph visu1 = Graphe.adaptGraphe(graphe1);
+        Graph visu2 = Graphe.adaptGraphe(graphe2);
+        Graph visuResult = Graphe.adaptGraphe(result);
+        visu1.display();
+        visu2.display();
+        visuResult.display();
     }
 }

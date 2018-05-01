@@ -12,8 +12,8 @@ public class testGraphe {
 //        littleTestRandom();
 //        testGenerateRandomGraph();
 //        testDisplay();
-        testRandomSwap();
-//        testConstructeurAvecSommet();
+//        testRandomSwap();
+        testConstructeurAvecSommet();
     }
 
     public static void testGenerateRandomGraph() {
@@ -45,6 +45,10 @@ public class testGraphe {
         System.out.println(sommets.size());
         Graphe ne = new Graphe(sommets, true);
         System.out.println(graphe.equals(ne));
+        Graph visu1 = Graphe.adaptGraphe(graphe);
+        Graph visu2 = Graphe.adaptGraphe(ne);
+        visu1.display();
+        visu2.display();
     }
 
     public static void testDisplay() {
