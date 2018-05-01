@@ -81,12 +81,10 @@ public class Genetique {
         List<Map<Integer, Client>> rearangeChildren = rearangeChild(convertListToMapPosition(child_1), convertListToMapPosition(child_2));
         child_1 = rearangeChildren.get(0).values().stream().collect(Collectors.toList());
         child_2 = rearangeChildren.get(1).values().stream().collect(Collectors.toList());
-        System.out.println(child_1);
-        System.out.println(child_2);
         Graphe graphe = new Graphe(child_1);
         Graphe graphe2 = new Graphe(child_2);
-        System.out.println(graphe.getCtotal());
-        System.out.println(graphe2.getCtotal());
+        graphe.isValid();
+        graphe2.isValid();
         if (graphe.cout() > graphe2.cout()) {
             return graphe2;
         }
@@ -120,7 +118,7 @@ public class Genetique {
             }
 
         }
-        missing_child1.forEach((key, value) -> child.remove(key, value));
+        missing_child1.forEach(child::remove);
     }
 
     public static Map<Integer, Client> convertListToMapPosition(List<Client> clients) {

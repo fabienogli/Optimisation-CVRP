@@ -17,6 +17,7 @@ public class Circuit {
 
     public void setArcs(HashMap<Integer, Arc> arcs) {
         this.arcs = arcs;
+        this.sommets = new ArrayList<>();
         this.arcs.forEach((key, value) -> this.sommets.add((Client) value.getSommets()[Arc.start]));
     }
 
@@ -51,6 +52,10 @@ public class Circuit {
 
     public ArrayList<Client> getSommets() {
         return this.sommets;
+    }
+
+    public void addSommet(Client client) {
+        this.sommets.add(client);
     }
 
     public int getC() {

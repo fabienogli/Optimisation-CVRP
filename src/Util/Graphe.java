@@ -26,19 +26,25 @@ public class Graphe {
     }
 
     public Graphe(List<Client> sommets) {    //Pour pouvoir faire un constructeur avec les sommets
+        System.out.println("dans le constructeur graphe");
         this.sommets = sommets;
         this.circuits = new ArrayList<>();
         Depot depot = (Depot) sommets.get(0);
         if (depot.getIdSommet() != 0) {
             return;
         }
-        sommets.remove(depot);
         Circuit circuit = new Circuit();
         Client lastSommet = depot;
         int i_arc = 0;
         HashMap<Integer, Arc> arcs = new HashMap<>();
-        for (Client sommet : sommets) {
+        for (int i =1; i < sommets.size(); i++) {
+            Client sommet = sommets.get(i);
+            System.out.println(sommet);
             if (sommet.getIdSommet() == 0) {
+                if (lastSommet == depot) {
+                    continue;
+                }
+                System.out.println("premier if: " + circuit.getC());
                 arcs.put(i_arc, new Arc(lastSommet, depot));
                 circuit.setArcs(arcs);
                 this.circuits.add(circuit);
@@ -48,6 +54,18 @@ public class Graphe {
                 i_arc = 0;
                 continue;
             }
+            if (sommet.getQuantite() + circuit.getC() > 100) {
+                System.out.println("deuxieme if: " + circuit.getC());
+                arcs.put(i_arc, new Arc(lastSommet, depot));
+                circuit.setArcs(arcs);
+                this.circuits.add(circuit);
+                circuit = new Circuit();
+                arcs = new HashMap<>();
+                lastSommet = depot;
+                i_arc = 0;
+            }
+            System.out.println("le cout: " + circuit.getC());
+            circuit.addSommet(sommet);
             arcs.put(i_arc, new Arc(lastSommet, sommet));
             lastSommet = sommet;
             i_arc++;
@@ -55,6 +73,7 @@ public class Graphe {
         arcs.put(i_arc, new Arc(lastSommet, depot));
         circuit.setArcs(arcs);
         this.circuits.add(circuit);
+        System.out.println("dans le constructeur graphe");
     }
 
     public Graphe(String dataset) {
@@ -319,5 +338,15 @@ public class Graphe {
 
     public List<Client> getSommets() {
         return this.sommets;
+    }
+
+    public boolean isValid() {
+        for (int i = 0; i < circuits.size(); i++) {
+            if (circuits.get(i).getC() > 100) {
+                System.out.println("Un circuit "+ i + " n'est pas valide: C= " +circuits.get(i).getC());
+                return false;
+            }
+        }
+        return true;
     }
 }
