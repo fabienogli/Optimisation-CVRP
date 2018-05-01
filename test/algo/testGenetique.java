@@ -17,6 +17,7 @@ public class testGenetique {
 //        testRearangeChildren();
 //        testExtractDoublon();
         testCrossover();
+//        testAlgoGenetique();
     }
 
     public static void littleTestRandom() {
@@ -51,12 +52,12 @@ public class testGenetique {
             Graphe graphe = Graphe.generateRandomGraph("data01");
             grapheHashMap.put(i, graphe);
         }
-        HashMap<Integer, Graphe> grapheHashMap1 = Genetique.reproduction(grapheHashMap);
+        List<Graphe> grapheHashMap1 = Genetique.reproduction(new ArrayList<Graphe>(grapheHashMap.values()));
         grapheHashMap.entrySet().stream().forEach(integerGrapheEntry -> {
             System.out.println("cout du graphe " + integerGrapheEntry.getKey() + ": " + integerGrapheEntry.getValue().cout());
         });
-        grapheHashMap1.entrySet().stream().forEach(integerGrapheEntry -> {
-            System.out.println("cout du graphe reproduit " + integerGrapheEntry.getKey() + ": " + integerGrapheEntry.getValue().cout());
+        grapheHashMap1.forEach(integerGrapheEntry -> {
+            System.out.println("cout du graphe reproduit: " + integerGrapheEntry.cout());
         });
 //        System.out.println(grapheHashMap);
     }
@@ -149,11 +150,38 @@ public class testGenetique {
         Graphe graphe1 = Graphe.generateRandomGraph("data01");
         Graphe graphe2 = Graphe.generateRandomGraph("data01");
         Graphe result = Genetique.crossover(graphe1, graphe2, graphe1.getSommets().size() / 2);
+        System.out.println("cout des deux premiers graphes: " + graphe1.cout() + " et " + graphe2.cout());
+        System.out.println("cout du croisement: " +result.cout());
+        System.out.println("le graphe est il valide ? " + result.isValid());
+        System.out.println("le graphe possède-t-il tous les sommets ? " + checkIfAllSommetsHere(result));
         Graph visu1 = Graphe.adaptGraphe(graphe1);
         Graph visu2 = Graphe.adaptGraphe(graphe2);
         Graph visuResult = Graphe.adaptGraphe(result);
         visu1.display();
         visu2.display();
         visuResult.display();
+    }
+
+    public static void testAlgoGenetique() {
+        Graphe graphe = Genetique.algo(8, 5, "data01", 0.05);
+        System.out.println(graphe.cout());
+        Graph graph = Graphe.adaptGraphe(graphe);
+        graph.display();
+    }
+
+    public static boolean checkIfAllSommetsHere(Graphe result) {
+        for (int i = 0; i < 32; i++) {
+            boolean found = false;
+            for (int j = 0; j < result.getSommets().size(); j++) {
+                if (result.getSommets().get(j).getIdSommet() == i) {
+                    found = true;
+                }
+            }
+            if (!found) {
+                System.out.println("Le sommets "+ i +" n'a pas été trouvé");
+                return false;
+            }
+        }
+        return true;
     }
 }

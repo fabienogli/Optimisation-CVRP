@@ -26,7 +26,7 @@ public class Graphe {
     }
 
     public Graphe(List<Client> sommets) {    //Pour pouvoir faire un constructeur avec les sommets
-        System.out.println("dans le constructeur graphe");
+//        System.out.println("dans le constructeur graphe");
         this.sommets = sommets;
         this.circuits = new ArrayList<>();
         Depot depot = (Depot) sommets.get(0);
@@ -39,12 +39,12 @@ public class Graphe {
         HashMap<Integer, Arc> arcs = new HashMap<>();
         for (int i =1; i < sommets.size(); i++) {
             Client sommet = sommets.get(i);
-            System.out.println(sommet);
-            if (sommet.getIdSommet() == 0) {
+//            System.out.println(sommet);
+            if (sommet.getIdSommet() == 0 || sommet.getQuantite() + circuit.getC() > 100) {
                 if (lastSommet == depot) {
                     continue;
                 }
-                System.out.println("premier if: " + circuit.getC());
+//                System.out.println("premier if: " + circuit.getC());
                 arcs.put(i_arc, new Arc(lastSommet, depot));
                 circuit.setArcs(arcs);
                 this.circuits.add(circuit);
@@ -54,17 +54,19 @@ public class Graphe {
                 i_arc = 0;
                 continue;
             }
-            if (sommet.getQuantite() + circuit.getC() > 100) {
-                System.out.println("deuxieme if: " + circuit.getC());
-                arcs.put(i_arc, new Arc(lastSommet, depot));
-                circuit.setArcs(arcs);
-                this.circuits.add(circuit);
-                circuit = new Circuit();
-                arcs = new HashMap<>();
-                lastSommet = depot;
-                i_arc = 0;
-            }
-            System.out.println("le cout: " + circuit.getC());
+//            if (sommet.getQuantite() + circuit.getC() > 100) {
+//                System.out.println("last sommet parce que c dépassé: " + lastSommet);
+////                System.out.println("deuxieme if: " + circuit.getC());
+//                arcs.put(i_arc, new Arc(lastSommet, depot));
+//                circuit.setArcs(arcs);
+//                this.circuits.add(circuit);
+//                circuit = new Circuit();
+//                arcs = new HashMap<>();
+//                lastSommet = depot;
+//                i_arc = 0;
+//                continue;
+//            }
+//            System.out.println("le cout: " + circuit.getC());
             circuit.addSommet(sommet);
             arcs.put(i_arc, new Arc(lastSommet, sommet));
             lastSommet = sommet;
@@ -73,7 +75,7 @@ public class Graphe {
         arcs.put(i_arc, new Arc(lastSommet, depot));
         circuit.setArcs(arcs);
         this.circuits.add(circuit);
-        System.out.println("dans le constructeur graphe");
+//        System.out.println("dans le constructeur graphe");
     }
 
     public Graphe(String dataset) {
@@ -196,8 +198,9 @@ public class Graphe {
         Circuit circuit = new Circuit();
         HashMap<Integer, Arc> arcs = new HashMap<>();
         int cout = 0;
-        Client lastClient = null;
+        Client lastClient = depot;
         int i_arc = 0;
+        lastClient = depot;
 
         while (!clients.isEmpty()) {
             Random random = new Random();
@@ -209,27 +212,25 @@ public class Graphe {
                 randomKey = keys.get(random.nextInt(keys.size()));
                 client = clients.get(randomKey);
             }
-            if (lastClient == null) {   //C'est un nouveau circuit, on doit l'intialiser
+            if (client.getQuantite() + cout >= cmax) {   //C'est un nouveau circuit, on doit l'intialiser
+                arcs.put(i_arc, new Arc(lastClient, depot));
+                circuit.setArcs(arcs);
+                circuits.add(circuit);
                 circuit = new Circuit();
                 arcs = new HashMap<>();
                 cout = 0;
                 i_arc = 0;
                 lastClient = depot;
             }
-            if (client.getQuantite() + cout >= cmax && lastClient != null) {
-                arcs.put(i_arc, new Arc(lastClient, depot));
-
-                circuit.setArcs(arcs);
-                circuits.add(circuit);
-                lastClient = null;
-            } else {
                 arcs.put(i_arc, new Arc(lastClient, client));
                 cout += client.getQuantite();
                 lastClient = client;
                 clients.remove(randomKey, client);
-            }
             i_arc++;
         }
+        arcs.put(i_arc, new Arc(lastClient, depot));
+        circuit.setArcs(arcs);
+        circuits.add(circuit);
         graphe.setCircuits(circuits);
         List<Client> sommets = new ArrayList<>();
         circuits.stream().forEach(circ -> {
@@ -281,6 +282,12 @@ public class Graphe {
         }
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "Graphe avec au max C =" + getCtotal() + ", un distance total de " + cout() + " et " + circuits.size() + " circuits";
+    }
+
     public static void main(String args[]) {
         Graphe graphe = new Graphe("data01");
        // Graphe graphe1 = generateRandomGrapheFromSommet(graphe.getClients());

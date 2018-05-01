@@ -10,19 +10,23 @@ public class testGraphe {
 
     public static void main(String[] args) {
 //        littleTestRandom();
-//        testGenerateRandomGraph();
+        testGenerateRandomGraph();
 //        testDisplay();
 //        testRandomSwap();
-        testConstructeurAvecSommet();
+//        testConstructeurAvecSommet();
     }
 
     public static void testGenerateRandomGraph() {
         Graphe graphe = Graphe.generateRandomGraph("data01");
+        checkIfAllSommetsHere(graphe);
         graphe.getCircuits().stream().forEach(circuit -> {
             System.out.println("cout de circuit: " + circuit.cout());
         });
         System.out.println("cout du graphe" + graphe.cout());
+        Graph visu = Graphe.adaptGraphe(graphe);
+        visu.display();
     }
+
     public static void testRandomSwap() {
         Graphe graphe = Graphe.generateRandomGraph("data01");
         graphe.getCircuits().stream().forEach(circuit -> {
@@ -55,6 +59,22 @@ public class testGraphe {
         Graphe graphe = Graphe.generateRandomGraph("data01");
         Graph graph = Graphe.adaptGraphe(graphe);
         graph.display();
+    }
+
+    public static boolean checkIfAllSommetsHere(Graphe result) {
+        for (int i = 0; i < 32; i++) {
+            boolean found = false;
+            for (int j = 0; j < result.getSommets().size(); j++) {
+                if (result.getSommets().get(j).getIdSommet() == i) {
+                    found = true;
+                }
+            }
+            if (!found) {
+                System.out.println("Le sommets "+ i +" n'a pas été trouvé");
+                return false;
+            }
+        }
+        return true;
     }
 
 
