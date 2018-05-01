@@ -40,10 +40,10 @@ public class Graphe {
         for (int i =1; i < sommets.size(); i++) {
             Client sommet = sommets.get(i);
 //            System.out.println(sommet);
-            if (sommet.getIdSommet() == 0 || sommet.getQuantite() + circuit.getC() > 100) {
-                if (lastSommet == depot) {
-                    continue;
-                }
+            if (lastSommet == depot && sommet.getIdSommet() == 0) {
+                continue;
+            }
+            if (sommet.getQuantite() + circuit.getC() > 100) {
 //                System.out.println("premier if: " + circuit.getC());
                 arcs.put(i_arc, new Arc(lastSommet, depot));
                 circuit.setArcs(arcs);
@@ -52,21 +52,7 @@ public class Graphe {
                 arcs = new HashMap<>();
                 lastSommet = depot;
                 i_arc = 0;
-                continue;
             }
-//            if (sommet.getQuantite() + circuit.getC() > 100) {
-//                System.out.println("last sommet parce que c dépassé: " + lastSommet);
-////                System.out.println("deuxieme if: " + circuit.getC());
-//                arcs.put(i_arc, new Arc(lastSommet, depot));
-//                circuit.setArcs(arcs);
-//                this.circuits.add(circuit);
-//                circuit = new Circuit();
-//                arcs = new HashMap<>();
-//                lastSommet = depot;
-//                i_arc = 0;
-//                continue;
-//            }
-//            System.out.println("le cout: " + circuit.getC());
             circuit.addSommet(sommet);
             arcs.put(i_arc, new Arc(lastSommet, sommet));
             lastSommet = sommet;

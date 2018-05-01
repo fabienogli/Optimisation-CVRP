@@ -83,32 +83,35 @@ public class testGenetique {
         client_1.add(c);
 
         client_2.add(a);
+        client_2.add(g);
         client_2.add(f);
         client_2.add(g);
         client_2.add(a);
         client_2.add(d);
         client_2.add(e);
-        client_2.add(g);
         client_2.add(a);
         client_2.add(f);
-
+        System.out.println("avant transformation");
+        Map<Integer, Client> mapClient1 = Genetique.convertListToMapClient(client_1);
+        Map<Integer, Client> mapClient2 = Genetique.convertListToMapClient(client_2);
         System.out.println("premiere liste");
-        client_1.forEach(System.out::println);
+        mapClient1.forEach((key, value) -> {
+            System.out.println("Client " + key + ": " + value.getIdSommet());
+        });
         System.out.println("seconde liste");
-        client_2.forEach(System.out::println);
-
-        List<Map<Integer, Client>> result =  Genetique.rearangeChild(Genetique.convertListToMapClient(client_1), Genetique.convertListToMapClient(client_2));
+        mapClient2.forEach((key, value) -> {
+            System.out.println("Client " + key + ": " + value.getIdSommet());
+        });
+        List<Map<Integer, Client>> result =  Genetique.rearangeChild(mapClient1, mapClient2);
         Map<Integer, Client> child1 = result.get(0);
         Map<Integer, Client> child2 = result.get(1);
         System.out.println("premier child:");
         child1.forEach((key, value) -> {
-            System.out.println("key: " + key);
-            System.out.println("value: " + value);
+            System.out.println("key: " + key+": " + value.getIdSommet());
         });
         System.out.println("second child:");
         child1.forEach((key, value) -> {
-            System.out.println("key: " + key);
-            System.out.println("value: " + value);
+            System.out.println("key: " + key +": " + value.getIdSommet());
         });
     }
 
@@ -127,16 +130,16 @@ public class testGenetique {
         client_1.add(a);
         client_1.add(c);
         client_1.add(d);
-        client_1.add(c);
         client_1.add(e);
         client_1.add(a);
         client_1.add(b);
+        client_1.add(c);
         Map<Integer, Client> client = Genetique.convertListToMapClient(client_1);
         System.out.println("premiere liste");
         client.forEach((key, value) -> {
             System.out.println("valeur à la " + key + "position = " + value.getIdSommet());
         });
-        Genetique.extractDoublon(client, missingChild);
+        missingChild = Genetique.extractDoublon(client);
         System.out.println("après algo");
         client.forEach((key, value) -> {
             System.out.println("valeur à la " + key + " position = " + value.getIdSommet());

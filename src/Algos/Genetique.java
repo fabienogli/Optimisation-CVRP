@@ -122,48 +122,39 @@ public class Genetique {
     public static Graphe crossover(Graphe first, Graphe second, int indice) {
         List<Client> mom =  first.getSommets();
         List<Client> dad =  second.getSommets();
-        System.out.println("taille de la mere:" + mom.size());
-        System.out.println("taille du pere:" + dad.size());
+//        System.out.println("taille de la mere:" + mom.size());
+//        System.out.println("taille du pere:" + dad.size());
         if (mom.size() <= indice) {
             return null;
         }
-        System.out.println("indice= " + indice);
-        System.out.println("valeur qui séprare mere " + mom.get(indice));
-        System.out.println("mom :");
-        mom.forEach(System.out::println);
-        System.out.println("valeur qui séprare pere " + dad.get(indice));
-        System.out.println("dad :");
-        mom.forEach(System.out::println);
+//        System.out.println("indice= " + indice);
+//        System.out.println("valeur qui séprare mere " + mom.get(indice));
+//        System.out.println("mom :");
+//        mom.forEach(System.out::println);
+//        System.out.println("valeur qui séprare pere " + dad.get(indice));
+//        System.out.println("dad :");
+//        dad.forEach(System.out::println);
         //enfant de la première liste
         List<Client> child_1 = new ArrayList<>(mom.subList(0, indice));
         List<Client> child_2 = new ArrayList<>(dad.subList(0, indice));
-        System.out.println("moit taille child 1 " + child_1.size());
-        System.out.println("moit taille child 2 " + child_2.size());
+//        System.out.println("moit taille child 1 " + child_1.size());
+//        System.out.println("moit taille child 2 " + child_2.size());
         child_1.addAll(indice, new ArrayList<>(dad.subList(indice, dad.size())));
-        System.out.println("mom sublist casse les couilles " + mom.subList(indice, mom.size()).size());
-        System.out.println("sq taille child 1 " + child_1.size());
+//        System.out.println("mom sublist casse les couilles " + mom.subList(indice, mom.size()).size());
+//        System.out.println("sq taille child 1 " + child_1.size());
         child_2.addAll(indice, new ArrayList<>(mom.subList(indice, mom.size())));
-        System.out.println("taille child 1 " + child_1.size());
-        System.out.println("taille child 2 " + child_2.size());
+//        System.out.println("taille child 1 " + child_1.size());
+//        System.out.println("taille child 2 " + child_2.size());
 
         Map<Integer, Client> mapChild1 = convertListToMapClient(child_1);
         Map<Integer, Client> mapChild2 = convertListToMapClient(child_2);
-        System.out.println("child 1");
-        mapChild1.forEach((key, value) -> {
-            System.out.println(" le sommet position "+key+": "+value.getIdSommet() );
-        });
-        System.out.println("child 2");
-        mapChild2.forEach((key, value) -> {
-            System.out.println(" le sommet position "+key+": "+value.getIdSommet() );
-        });
         List<Map<Integer, Client>> rearangeChildren = rearangeChild(mapChild1, mapChild2);
-        System.out.println("après transformation");
         child_1 = new ArrayList<>(rearangeChildren.get(0).values());
         child_2 = new ArrayList<>(rearangeChildren.get(1).values());
-        System.out.println("child 1");
-        child_1.forEach(System.out::println);
-        System.out.println("child 2");
-        child_2.forEach(System.out::println);
+//        System.out.println("child 1");
+//        child_1.forEach(System.out::println);
+//        System.out.println("child 2");
+//        child_2.forEach(System.out::println);
         Graphe graphe = new Graphe(child_1);
         Graphe graphe2 = new Graphe(child_2);
         graphe.isValid();
@@ -178,36 +169,40 @@ public class Genetique {
 
     public static List<Map<Integer, Client>> rearangeChild(Map<Integer, Client> child_1, Map<Integer, Client> child_2) {
         List<Map<Integer, Client>> result = new ArrayList<>();
-        HashMap<Integer, Client> missing_child1 = new HashMap<>();
-        HashMap<Integer, Client> missing_child2 = new HashMap<>();
-        extractDoublon(child_1, missing_child2);
-        extractDoublon(child_2, missing_child1);
-        missing_child1.forEach(child_1::put);
-        missing_child2.forEach(child_2::put);
+        System.out.println("child 2");
+        Map<Integer, Client> missing_child1 = extractDoublon(child_2);
+        System.out.println("child 1");
+        Map<Integer, Client> missing_child2 = extractDoublon(child_1);
+        missing_child1.forEach((key, value) -> {
+            Map.Entry<Integer, Client> entry = missing_child2.entrySet().iterator().next();
+            child_1.put(entry.getKey(), value);
+            child_2.put(key, entry.getValue());
+            missing_child2.remove(entry.getKey(), entry.getValue());
+        });
         result.add(0, child_1);
         result.add(1, child_2);
         return result;
     }
 
-    public static void extractDoublon(Map<Integer, Client> child, Map<Integer, Client> missing_child1) {
-        for (int i = 0; i < child.size(); i++) {
+    public static Map<Integer, Client> extractDoublon(Map<Integer, Client> child) {
+        Map<Integer, Client> missing_child1 = new HashMap<>();
+        System.out.println("taille=" +child.size());
+        int size = child.size();
+        for (int i = 0; i < size; i++) {
             Client client = child.get(i);
-            if (client == null) {
+            if (client == null || client.getIdSommet() == 0) {
                 continue;
             }
-            if (client.getIdSommet() == 0) {
-                continue;
-            }
-            for (int j = i + 1; j < child.size(); j++) {
+            for (int j = i + 1; j < size; j++) {
                 Client toCompare = child.get(j);
                 if (client.equals(toCompare)) {
                     missing_child1.put(j,toCompare);
-                    System.out.println("sommet enlevé: " +toCompare);
                     child.remove(j, toCompare);
                 }
             }
 
         }
+        return missing_child1;
     }
 
     public static Map<Integer, Client> convertListToMapClient(List<Client> clients) {
