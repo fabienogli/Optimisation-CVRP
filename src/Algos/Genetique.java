@@ -1,10 +1,9 @@
 package Algos;
 
 import Util.Graphe;
-import org.graphstream.graph.Graph;
 import Util.Client;
+import org.graphstream.graph.Graph;
 
-import java.sql.ClientInfoStatus;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -27,21 +26,66 @@ public class Genetique {
      * Retourner le meilleur individu trouvé.
      */
 
-    public void algo(int nbGeneration, int nbPopulation, String dataset) {
+    public static Graphe algo(int nbPopulation, String dataset, boolean stopCondition, double probaMutation) {
         Graphe bestSolution;
         List<Graphe> population = new ArrayList<>();
+        List<Graphe> populationBis = new ArrayList<>();
+        Double minCout = -1.0;
+        Graphe minGraph = null;
         for (int i = 0; i < nbPopulation; i++) {
-            population.add(Graphe.generateRandomGraph(dataset));
+            //Initialisation de POP
+            Graphe graphe = Graphe.generateRandomGraph(dataset);
+            //Affectation des minimum
+            if (minGraph == null) {
+                minCout = graphe.cout();
+                minGraph = graphe;
+            }
         }
-
+        while (stopCondition) {
+            evaluatePop(minCout, minGraph, population);
+            while (populationBis.size() != population.size()) {
+                //Phase de reproduction
+                List<Graphe> popReproduite = reproduction(population);
+                //Phase de croisement
+                List<Graphe> children = new ArrayList<>();
+                for (int i = 0; i < popReproduite.size()-1; i += 2) {
+                    children.add(crossover(popReproduite.get(i), popReproduite.get(i + 1), popReproduite.size() / 2));
+                }
+                //Phase de mutation
+                for (int i = 0; i < children.size(); i++) {
+                    populationBis.add(mutation(children.get(i), probaMutation));
+                }
+            }
+            if (populationBis.stream().mapToDouble(Graphe::cout).max().orElse(-1.0) < population.stream().mapToDouble(Graphe::cout).max().orElse(-1.0)) {
+                population = populationBis;
+                populationBis.clear();
+            }
+            evaluatePop(minCout, minGraph, population);
+        }
+        return minGraph;
     }
 
-    public static HashMap<Integer, Graphe> reproduction(HashMap<Integer, Graphe> graphes) {
+    public static void evaluatePop(Double minCout, Graphe minGraph, List<Graphe> graphes) {
+        for (Graphe graphe : graphes) {
+            if (minGraph == null || minCout > graphe.cout()) {
+                minCout = graphe.cout();
+                minGraph = graphe;
+            }
+        }
+    }
+
+    /**
+     *
+     * @param _graphes List population initiale
+     * @return graphe List population reproduite
+     */
+    public static List<Graphe> reproduction(List<Graphe> _graphes) {
+        Map<Integer, Graphe> graphes = convertListToMapGraphe(_graphes);
         HashMap<Integer, Graphe> kiddo = new HashMap<Integer, Graphe>();
         Double sum = graphes.values().stream().mapToDouble(Graphe::cout).sum();
         HashMap<Integer, Double> freq = new HashMap<>();
         graphes.forEach((integer, graphe) -> {
-            double result = graphe.cout() / sum;
+            double result = 1- (graphe.cout() / sum);
             freq.put(integer, result);
         });
 
@@ -64,7 +108,7 @@ public class Genetique {
             }
             kiddo.put(i, graphes.get(result.getKey()));
         }
-        return kiddo;
+        return new ArrayList<>(kiddo.values());
     }
 
     public static Graphe crossover(Graphe first, Graphe second, int indice) {
@@ -78,7 +122,7 @@ public class Genetique {
         List<Client> child_2 = list2.subList(0, indice);
         child_1.addAll(list2.subList(indice + 1 , list2.size()));
         child_2.addAll(list1.subList(indice + 1 , list1.size()));
-        List<Map<Integer, Client>> rearangeChildren = rearangeChild(convertListToMapPosition(child_1), convertListToMapPosition(child_2));
+        List<Map<Integer, Client>> rearangeChildren = rearangeChild(convertListToMapClient(child_1), convertListToMapClient(child_2));
         child_1 = rearangeChildren.get(0).values().stream().collect(Collectors.toList());
         child_2 = rearangeChildren.get(1).values().stream().collect(Collectors.toList());
         Graphe graphe = new Graphe(child_1);
@@ -121,8 +165,16 @@ public class Genetique {
         missing_child1.forEach(child::remove);
     }
 
-    public static Map<Integer, Client> convertListToMapPosition(List<Client> clients) {
+    public static Map<Integer, Client> convertListToMapClient(List<Client> clients) {
         Map<Integer, Client> map = new HashMap<>();
+        for (int i = 0; i < clients.size(); i++) {
+            map.put(i, clients.get(i));
+        }
+        return map;
+    }
+
+    public static Map<Integer, Graphe> convertListToMapGraphe(List<Graphe> clients) {
+        Map<Integer, Graphe> map = new HashMap<>();
         for (int i = 0; i < clients.size(); i++) {
             map.put(i, clients.get(i));
         }

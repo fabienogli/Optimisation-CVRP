@@ -240,7 +240,7 @@ public class Graphe {
     }
 
     public static Graphe swapRandomSommet(Graphe graphe) {
-        //Map<Integer, Client> map = Genetique.convertListToMapPosition(graphe.getSommets());
+        //Map<Integer, Client> map = Genetique.convertListToMapClient(graphe.getSommets());
         Map<Integer, Client> map =graphe.getClients();
         Random random = new Random();
         List<Integer> keys = new ArrayList<>(map.keySet());

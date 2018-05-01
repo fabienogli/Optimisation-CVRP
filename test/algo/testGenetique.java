@@ -5,12 +5,8 @@ import Util.Coordonnee;
 import Util.Graphe;
 import Util.Client;
 import org.graphstream.graph.Graph;
-import scala.Int;
 
-import javax.swing.text.html.Option;
-import java.sql.ClientInfoStatus;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class testGenetique {
@@ -100,7 +96,7 @@ public class testGenetique {
         System.out.println("seconde liste");
         client_2.forEach(System.out::println);
 
-        List<Map<Integer, Client>> result =  Genetique.rearangeChild(Genetique.convertListToMapPosition(client_1), Genetique.convertListToMapPosition(client_2));
+        List<Map<Integer, Client>> result =  Genetique.rearangeChild(Genetique.convertListToMapClient(client_1), Genetique.convertListToMapClient(client_2));
         Map<Integer, Client> child1 = result.get(0);
         Map<Integer, Client> child2 = result.get(1);
         System.out.println("premier child:");
@@ -134,7 +130,7 @@ public class testGenetique {
         client_1.add(e);
         client_1.add(a);
         client_1.add(b);
-        Map<Integer, Client> client = Genetique.convertListToMapPosition(client_1);
+        Map<Integer, Client> client = Genetique.convertListToMapClient(client_1);
         System.out.println("premiere liste");
         client.forEach((key, value) -> {
             System.out.println("valeur à la " + key + "position = " + value.getIdSommet());
