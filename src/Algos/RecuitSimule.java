@@ -13,15 +13,11 @@ public class RecuitSimule {
         return temperature * mu;
     }
 
-    ;
-
     //fonction f(x)
     public static Double evaluateFunction(Graphe solution) {
         //Le coût total d’une solution est la somme des coût de chaque Ri.
         return solution.cout();
     }
-
-    ;
 
     //generer voisinage
     public static Graphe generateRandomNeighbors(Graphe solution) {

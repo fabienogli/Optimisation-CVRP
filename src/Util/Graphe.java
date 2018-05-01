@@ -58,8 +58,11 @@ public class Graphe {
     }
 
     public Graphe(String dataset) {
+        this(SommetFactory.getDataFromDb(dataset));
+    }
+    public Graphe(Map<Integer,Client> map){
         this();
-        this.clients = SommetFactory.getDataFromDb(dataset);
+        this.clients = map;
         depot = (Depot) this.clients.get(0);
         int i = 1;
         int nbClients = this.clients.size() - 1;
@@ -218,7 +221,8 @@ public class Graphe {
     }
 
     public static Graphe swapRandomSommet(Graphe graphe) {
-        Map<Integer, Client> map = Genetique.convertListToMapPosition(graphe.getSommets());
+        //Map<Integer, Client> map = Genetique.convertListToMapPosition(graphe.getSommets());
+        Map<Integer, Client> map =graphe.getClients();
         Random random = new Random();
         List<Integer> keys = new ArrayList<>(map.keySet());
         int firstRandomKey = keys.get(random.nextInt(keys.size()));
@@ -236,8 +240,10 @@ public class Graphe {
         map.remove(toSwap1);
         map.put(secondRandomKey, toSwap);
         map.put(firstRandomKey, toSwap1);
-        System.out.println(map.values().stream().collect(Collectors.toList()));
-        return new Graphe(map.values().stream().collect(Collectors.toList()));
+        graphe.setClients(map);
+        //System.out.println(map.values().stream().collect(Collectors.toList()));
+        //return new Graphe(map.values().stream().collect(Collectors.toList()));
+        return  new Graphe(graphe.clients);
     }
 
     @Override
@@ -257,21 +263,28 @@ public class Graphe {
         return true;
     }
     public static void main(String args[]) {
-        Graphe graphe = new Graphe("data02");
-        Graphe graphe1 = generateRandomGrapheFromSommet(graphe.getClients());
+        Graphe graphe = new Graphe("data01");
+       // Graphe graphe1 = generateRandomGrapheFromSommet(graphe.getClients());
+        Graph graph = graphe.adaptGraphe();
+        graph.display();
+        Graphe graphe1=swapRandomSommet(graphe);
         /*Graph graph = new MultiGraph("Tutorial 1");
         SpriteManager sman = new SpriteManager(graph);
         graph.addNode("C");
         graph.addNode("A");
-        graph.addNode("B");
+        graph.addNode("B");*/
 
-    /**
-     * Getteur et Setteur
-     */
+        Graph graph1= graphe1.adaptGraphe();
+
+        graph1.display();
+
+    }
 
     public Depot getDepot() {
         return depot;
     }
+
+    // * Getteur et Setteur
 
     public void setDepot(Depot depot) {
         this.depot = depot;
