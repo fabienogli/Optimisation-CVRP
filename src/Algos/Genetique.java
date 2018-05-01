@@ -27,7 +27,12 @@ public class Genetique {
      * Retourner le meilleur individu trouvé.
      */
 
-    public void algo(ArrayList<Graphe> graphes) {
+    public void algo(int nbGeneration, int nbPopulation, String dataset) {
+        Graphe bestSolution;
+        List<Graphe> population = new ArrayList<>();
+        for (int i = 0; i < nbPopulation; i++) {
+            population.add(Graphe.generateRandomGraph(dataset));
+        }
 
     }
 
@@ -78,8 +83,8 @@ public class Genetique {
         child_2 = rearangeChildren.get(1).values().stream().collect(Collectors.toList());
         System.out.println(child_1);
         System.out.println(child_2);
-        Graphe graphe = new Graphe(child_1, true);
-        Graphe graphe2 = new Graphe(child_2, true);
+        Graphe graphe = new Graphe(child_1);
+        Graphe graphe2 = new Graphe(child_2);
         System.out.println(graphe.getCtotal());
         System.out.println(graphe2.getCtotal());
         if (graphe.cout() > graphe2.cout()) {
@@ -124,5 +129,13 @@ public class Genetique {
             map.put(i, clients.get(i));
         }
         return map;
+    }
+
+    public static Graphe mutation(Graphe graphe, double prob) {
+        Random random = new Random();
+        if (random.nextDouble() >= prob) {
+            return graphe;
+        }
+        return Graphe.swapRandomSommet(graphe);
     }
 }

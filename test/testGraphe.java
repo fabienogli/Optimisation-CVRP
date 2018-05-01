@@ -43,7 +43,7 @@ public class testGraphe {
         System.out.println(graphe.equals(graphe));
         List<Client>  sommets = graphe.getSommets();
         System.out.println(sommets.size());
-        Graphe ne = new Graphe(sommets, true);
+        Graphe ne = new Graphe(sommets);
         System.out.println(graphe.equals(ne));
         Graph visu1 = Graphe.adaptGraphe(graphe);
         Graph visu2 = Graphe.adaptGraphe(ne);
