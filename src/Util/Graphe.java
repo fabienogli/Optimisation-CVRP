@@ -68,7 +68,7 @@ public class Graphe {
         int nbClients = this.clients.size() - 1;
         int j = 1;
         while (i <= nbClients) {
-            System.out.println("Circuit " + i);
+           // System.out.println("Circuit " + i);
             int Cmax = 0;
             Circuit circuit = new Circuit();
             HashMap<Integer, Arc> arcs = new HashMap<>();
@@ -91,7 +91,7 @@ public class Graphe {
                     j++;
                     circuit.getClients().add(this.clients.get(i));
                     i++;
-                    System.out.println("Cmax=" + Cmax);
+                    //System.out.println("Cmax=" + Cmax);
                 }
                 Arc arc2 = new Arc(this.clients.get(i - 1), this.clients.get(0));
                 arcs.put(j, arc2);
@@ -114,10 +114,10 @@ public class Graphe {
             circuit.setArcs(arcs);
             circuits.add(circuit);
         }
-        System.out.println("Fin Construction");
+       // System.out.println("Fin Construction");
     }
 
-    private Graph adaptGraphe() {
+    public Graph adaptGraphe() {
         Graph graph = new MultiGraph("Graphe");
         graph.setStrict(false);
         graph.setAutoCreate(true);
@@ -127,12 +127,12 @@ public class Graphe {
             graph.addNode(Integer.toString(client.getIdSommet()));
         });
         for (int i = 0; i < circuits.size(); i++) {
-            System.out.println("Circuit " + i);
+           // System.out.println("Circuit " + i);
             for (int keySet : circuits.get(i).getArcs().keySet()) {
                 String s2 = Integer.toString(circuits.get(i).getArcs().get(keySet).getSommets()[0].getIdSommet());
                 String s3 = Integer.toString(circuits.get(i).getArcs().get(keySet).getSommets()[1].getIdSommet());
-                graph.addEdge(s2 + s3, s2, s3);
-                System.out.println(s2 + s3 + "-" + s2 + "-" + s3);
+                graph.addEdge(s2 + s3, s2, s3,true);
+               // System.out.println(s2 + s3 + "-" + s2 + "-" + s3);
             }
         }
         for (Node node : graph) {
@@ -145,13 +145,14 @@ public class Graphe {
         Graph graph = new SingleGraph("Graphe");
         graph.setStrict(false);
         graph.setAutoCreate(true);
+
         SpriteManager sman = new SpriteManager(graph);
         int h = 1;
         ArrayList<Circuit> circuits = graphe.getCircuits();
         for (int i = 0; i < circuits.size(); i++) {
             for (int j = 0; j < circuits.get(i).getArcs().size(); j++) {
 
-                graph.addEdge(Integer.toString(h), Integer.toString(circuits.get(i).getArcs().get(j).getSommets()[0].getIdSommet()), Integer.toString(circuits.get(i).getArcs().get(j).getSommets()[1].getIdSommet()), true);
+                graph.addEdge(Integer.toString(h), Integer.toString(circuits.get(i).getArcs().get(j).getSommets()[0].getIdSommet()), Integer.toString(circuits.get(i).getArcs().get(j).getSommets()[1].getIdSommet()),true);
                 h++;
             }
         }
@@ -227,19 +228,33 @@ public class Graphe {
         List<Integer> keys = new ArrayList<>(map.keySet());
         int firstRandomKey = keys.get(random.nextInt(keys.size()));
         int secondRandomKey =  keys.get(random.nextInt(keys.size()));
-        System.out.println(map.get(firstRandomKey));
+        int thirdRandomKey = keys.get(random.nextInt(keys.size()));
+        int fourthRandomKey =  keys.get(random.nextInt(keys.size()));
+       // System.out.println(map.get(firstRandomKey));
         while (map.get(firstRandomKey).getIdSommet() == 0) {
             firstRandomKey = keys.get(random.nextInt(keys.size()));
         }
         while (map.get(secondRandomKey).getIdSommet() == 0 || secondRandomKey == firstRandomKey) {
             secondRandomKey = keys.get(random.nextInt(keys.size()));
         }
+        while (map.get(thirdRandomKey).getIdSommet() == 0 || thirdRandomKey == firstRandomKey || thirdRandomKey == secondRandomKey ) {
+            thirdRandomKey = keys.get(random.nextInt(keys.size()));
+        }
+        while (map.get(fourthRandomKey).getIdSommet() == 0 || fourthRandomKey == firstRandomKey || fourthRandomKey == secondRandomKey || fourthRandomKey==thirdRandomKey) {
+            fourthRandomKey = keys.get(random.nextInt(keys.size()));
+        }
         Client toSwap = map.get(firstRandomKey);
         Client toSwap1 = map.get(secondRandomKey);
+        Client toSwap2 = map.get(thirdRandomKey);
+        Client toSwap3 = map.get(fourthRandomKey);
         map.remove(toSwap);
         map.remove(toSwap1);
+        map.remove(toSwap2);
+        map.remove(toSwap3);
         map.put(secondRandomKey, toSwap);
         map.put(firstRandomKey, toSwap1);
+        map.put(thirdRandomKey,toSwap3);
+        map.put(fourthRandomKey,toSwap2);
         graphe.setClients(map);
         //System.out.println(map.values().stream().collect(Collectors.toList()));
         //return new Graphe(map.values().stream().collect(Collectors.toList()));
