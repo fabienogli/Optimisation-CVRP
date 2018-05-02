@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 import java.awt.*;
@@ -45,15 +46,20 @@ public class AppController implements Initializable {
     private ComboBox dataset;
 
     @FXML
+    private TextArea textArea;
+
+    @FXML
     private void setDataset(){
 
     }
 
     @FXML
-    public void lancer() throws CloneNotSupportedException {
+    public void lancer() throws CloneNotSupportedException, InterruptedException {
         //String dataset="data01";
         Graphe graphe = new Graphe((String) this.dataset.getValue());
-        RecuitSimule.executeAlgo(Double.parseDouble(tmin.getText()),Double.parseDouble(mu.getText()),graphe,Double.parseDouble(temperature.getText()),Integer.parseInt(iter.getText())).adaptGraphe().display();
+        Graphe solution = RecuitSimule.executeAlgo(Double.parseDouble(tmin.getText()),Double.parseDouble(mu.getText()),graphe,Double.parseDouble(temperature.getText()),Integer.parseInt(iter.getText()));
+       this.textArea.setText(String.valueOf(solution.cout()));
+        solution.adaptGraphe().display()   ;
     }
 
 
