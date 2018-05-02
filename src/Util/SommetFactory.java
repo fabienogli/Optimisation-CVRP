@@ -58,7 +58,7 @@ public class SommetFactory {
         }
         catch (FileNotFoundException e)
         {
-            System.out.println("Le fichier est introuvable !");
+            //System.out.println("Le fichier est introuvable !");
         } catch (IOException e) {
             e.printStackTrace();
         }
