@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import org.graphstream.graph.Graph;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -17,7 +18,8 @@ public class AppGenController implements Initializable {
     @FXML
     public void lancer() throws CloneNotSupportedException {
         //String dataset="data01";
-        Graphe graphe = new Graphe((String) this.dataset.getValue());
+        Graphe solution = Genetique.algo(Integer.valueOf(taillepop.getText()), Integer.valueOf(nbgen.getText()), this.dataset.getValue().toString(),  Integer.valueOf(proba.getText()));
+        solution.adaptGraphe().display();
     }
 
     @FXML
@@ -42,10 +44,4 @@ public class AppGenController implements Initializable {
                 );
         this.dataset.setItems(options);
     }
-    /*@FXML
-    public void lancer() throws CloneNotSupportedException {
-        //String dataset="data01";
-        Graphe graphe = new Graphe((String) this.dataset.getValue());
-
-    }*/
 }

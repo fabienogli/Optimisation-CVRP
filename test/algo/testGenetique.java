@@ -13,12 +13,12 @@ import java.util.stream.Collectors;
 public class testGenetique {
 
     public static void main(String[] args) {
-        for (int i = 1; i < 6; i++) {
-            Graphe graphe = Genetique.algo(150, 50, "data0" + i, 0.14);
+//        for (int i = 1; i < ; i++) {
+            Graphe graphe = Genetique.algo(150, 50, "data05", 0.14);
             Graph graph = Graphe.adaptGraphe(graphe);
             System.out.println(graphe.cout());
             graph.display();
-        }
+//        }
     }
 
     public static void littleTestRandom() {
