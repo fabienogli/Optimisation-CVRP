@@ -5,6 +5,7 @@ import Util.Coordonnee;
 import Util.Graphe;
 import Util.Client;
 import org.graphstream.graph.Graph;
+import scala.Int;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -13,17 +14,16 @@ public class testGenetique {
 
     public static void main(String[] args) {
 //        littleTestRandom();
-//        testReproduction(4);
+//        testReproduction(100000);
 //        testRearangeChildren();
 //        testExtractDoublon();
 //        for (int i = 0; i < 500; i++) {
 //
 //            testCrossover();
 //        }
-//        testAlgoGenetique();
+//        ultimateCrossover();
 //        testMutation();
-        optimisationCrossover();
-        optimisationMutation();
+        testAlgoGenetique();
     }
 
     public static void littleTestRandom() {
@@ -40,15 +40,15 @@ public class testGenetique {
 
         Random random = new Random();
         double result = random.nextDouble();
-        System.out.println("le tirage: "+ result);
+//        System.out.println("le tirage: "+ result);
         Map.Entry<Integer, Double> sa = testss.entrySet().stream().filter(integerDoubleEntry ->{
                 if (integerDoubleEntry.getValue() < result) {
                     return true;
                 }
                 return false;
             }).reduce((a,b) -> b).orElse(null);
-        System.out.println(sa.getKey());
-        System.out.println(sa.getValue());
+//        System.out.println(sa.getKey());
+//        System.out.println(sa.getValue());
 
     }
 
@@ -172,7 +172,9 @@ public class testGenetique {
     }
 
     public static void testAlgoGenetique() {
-        Graphe graphe = Genetique.algo(5000, 10, "data01", 0.1);
+//        Graphe graphe = Genetique.algo(5000, 10, "data01", 0.1);
+        //opti = popReproduction = 100000 prob=0.014 popCrossover =100000
+        Graphe graphe = Genetique.algo(150, 100, "data01", 0.014);
         System.out.println("Le cout final est " + graphe.cout());
         Graph graph = Graphe.adaptGraphe(graphe);
         graph.display();
@@ -201,67 +203,31 @@ public class testGenetique {
         }
     }
 
-    public static void optimisationCrossover() {
-        Graphe minGraphRandom = null;
-        int nbPopOptimaleRandom =0;
-        for (int i = 1000; i < 1000000; i *= 10) {
-            List<Graphe> pop = Genetique.generatePop("data01", 10);
-            minGraphRandom = Genetique.evaluatePop(minGraphRandom, pop);
-            for (int m = 0; m < 10; m++) {
-                List<Graphe> children = Genetique.randomCrossover(pop);
-                Graphe tmp = minGraphRandom;
-                minGraphRandom = Genetique.evaluatePop(minGraphRandom, children);
-                if (tmp == minGraphRandom) {
-                    nbPopOptimaleRandom = i;
-                }
-            }
-        }
-        System.out.println("Population optimale random crossover: " + nbPopOptimaleRandom);
-        System.out.println("Population optimale random crossover: cout  " + minGraphRandom.cout());
-
-        int nbPopOptimale =0;
-        Graphe minGraph = null;
-        for (int i = 1000; i < 1000000; i *= 10) {
-            List<Graphe> pop = Genetique.generatePop("data01", 10);
-            minGraph = Genetique.evaluatePop(minGraph, pop);
-            for (int m = 0; m < 10; m++) {
-                List<Graphe> children = Genetique.crossOverByOrder(pop);
-                Graphe tmp = minGraph;
-                minGraph = Genetique.evaluatePop(minGraph, children);
-                if (tmp == minGraph) {
-                    nbPopOptimale = i;
-                }
-            }
-        }
-        System.out.println("Population optimale random crossover: " + nbPopOptimale);
-        System.out.println("Population optimale random crossover: cout  " + minGraph.cout());
-        /**
-         * Result:
-         *
-         Population optimale random crossover: 100000
-         Population optimale random crossover: cout  1770.3564077262113
-         Population optimale random crossover: 100000
-         Population optimale random crossover: cout  1813.833239960234
-         */
+    public static void ultimateCrossover() {
+        int[] idsMom = {0, 23, 22, 3, 28, 31, 5, 20, 16, 24, 15, 9, 26, 2, 30, 29, 12, 18, 13, 8, 11, 17, 1, 0, 25, 6, 4, 14, 10, 27, 0, 21, 19, 7};
+        int[] idsdad = {0, 3, 11, 23, 8, 4, 7, 21, 0, 12, 14, 25, 13, 30, 18, 27, 1, 0, 9, 6, 17, 26, 2, 16, 28, 19, 29, 31, 22, 24, 0, 10, 5, 15, 20};
+        Graphe mom = createClient(idsMom);
+        Graphe dad = createClient(idsdad);
+//        checkIfAllSommetsHere(mom);
+//        checkIfAllSommetsHere(dad);
+//        Graph ui_mom = Graphe.adaptGraphe(mom);
+//        Graph ui_dad = Graphe.adaptGraphe(dad);
+//        ui_dad.display();
+//        ui_mom.display();
+        int pivot = 9;
+        Graphe graphe = Genetique.crossover(mom, dad, pivot);
+        checkIfAllSommetsHere(graphe);
+        Graph ui = Graphe.adaptGraphe(graphe);
+//        ui.display();
+        System.out.println(graphe);
     }
 
-    public static void optimisationMutation() {
-        Graphe init = Graphe.generateRandomGraph("data01");
-        Graphe minGraph = null;
-        Double bestProb = 0.0;
-        for (double prob = 0; prob < 1; prob += 0.001) {
-            for (int i = 0; i < 1000; i++) {
-                Graphe result = Genetique.mutation(init, prob);
-                if (minGraph == null || result.cout() < minGraph.cout()) {
-                    minGraph = result;
-                    bestProb = prob;
-                }
-            }
+    public static Graphe createClient(int[] tab) {
+        Map<Integer, Client> clients = new HashMap<>();
+        for (int i = 0; i < tab.length; i++) {
+            clients.put(i, new Client(tab[i], new Coordonnee(0, 0), 2));
         }
-        System.out.println("La meilleur proba est " + bestProb + " et le min cout est " + minGraph.cout());
-        /**
-         * result
-         * La meilleur proba est 0.014000000000000005 et le min cout est 2066.67599441071
-         */
+        Genetique.debugListSommet(new ArrayList<Client>(clients.values()));
+        return new Graphe(new ArrayList<Client>(clients.values()));
     }
 }

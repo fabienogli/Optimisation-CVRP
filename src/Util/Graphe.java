@@ -29,7 +29,8 @@ public class Graphe {
 //        System.out.println("dans le constructeur graphe");
         this.sommets = sommets;
         this.circuits = new ArrayList<>();
-        Depot depot = (Depot) sommets.get(0);
+        Client tmp = sommets.get(0);
+        Depot depot = new Depot(tmp.getCoordonnee());
         if (depot.getIdSommet() != 0) {
             return;
         }
@@ -53,9 +54,19 @@ public class Graphe {
                 lastSommet = depot;
                 i_arc = 0;
             }
+            if (sommet.getIdSommet() == 0) {
+                sommet = depot;
+            }
             circuit.addSommet(sommet);
             arcs.put(i_arc, new Arc(lastSommet, sommet));
             lastSommet = sommet;
+            if (lastSommet == depot) {
+                circuit.setArcs(arcs);
+                this.circuits.add(circuit);
+                circuit = new Circuit();
+                arcs = new HashMap<>();
+                i_arc = -1;
+            }
             i_arc++;
         }
         arcs.put(i_arc, new Arc(lastSommet, depot));
@@ -230,7 +241,6 @@ public class Graphe {
         List<Integer> keys = new ArrayList<>(map.keySet());
         int firstRandomKey = keys.get(random.nextInt(keys.size()));
         int secondRandomKey =  keys.get(random.nextInt(keys.size()));
-        System.out.println(map.get(firstRandomKey));
         while (map.get(firstRandomKey).getIdSommet() == 0) {
             firstRandomKey = keys.get(random.nextInt(keys.size()));
         }
@@ -324,8 +334,15 @@ public class Graphe {
         this.sommets = sommets;
     }
     public double cout() {
+//        double result =0;
+//        for (int i = 0; i < this.sommets.size() -1; i ++) {
+//            Coordonnee a = sommets.get(i).getCoordonnee();
+//            Coordonnee b = sommets.get(i + 1).getCoordonnee();
+//            result += Math.sqrt(Math.pow(b.getY() - a.getY(), 2) + Math.pow(b.getX() - a.getY(), 2));
+//        }
+//        return result;
         return circuits.stream().mapToDouble(Circuit::cout).sum();
-    }
+        }
 
     public int getCtotal() {
         return this.circuits.stream().mapToInt(Circuit::getC).max().orElse(-1);
@@ -343,5 +360,42 @@ public class Graphe {
             }
         }
         return true;
+    }
+
+    public static Graphe addCircuit(Graphe graphe, Circuit circuit) {
+        List<Client> clientsCircuit = circuit.getSommets();
+        List<Client> clients = graphe.getSommets();
+//        System.out.println(circuit.getSommets());
+        for (Client tmp : clientsCircuit) {
+            if (tmp.getIdSommet() == 0) {
+                continue;
+            }
+            clients.remove(tmp);
+            if (clients.indexOf(tmp) != -1) {
+                return null;
+            }
+        }
+        int size = clients.size();
+
+        clients.add(size, graphe.getDepot());
+        clients.addAll(size+1, clientsCircuit);
+        List<Client> clean = new ArrayList<>();
+        int i = 0;
+        for (Client tmp : clients) {
+            if (tmp == null) {
+                continue;
+            }
+            if (i > 0 && tmp.getIdSommet() == 0 && clean.get(i-1).getIdSommet() == 0) {
+                continue;
+            }
+//            System.out.println(tmp.getIdSommet());
+            clean.add(i, tmp);
+            i++;
+        }
+//        System.out.println("i =" + i);
+//        System.out.println();
+//        Genetique.debugListSommet(clean);
+        clean.size();
+        return new Graphe(clean);
     }
 }

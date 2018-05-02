@@ -80,4 +80,9 @@ public class Circuit {
         }
         return true;
     }
+
+    @Override
+    public String toString() {
+        return this.arcs.toString();
+    }
 }
