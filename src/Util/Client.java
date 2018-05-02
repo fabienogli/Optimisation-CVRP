@@ -1,6 +1,6 @@
 package Util;
 
-public class Client extends Sommet {
+public class Client extends Sommet implements Cloneable{
 
     private int quantite;
 
@@ -10,6 +10,11 @@ public class Client extends Sommet {
     }
 
     public Client() {
+    }
+
+    @Override
+    public Client clone() throws CloneNotSupportedException {
+        return (Client)super.clone();
     }
 
     public int getQuantite() {

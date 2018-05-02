@@ -10,6 +10,7 @@ public class Circuit {
 
     private ArrayList<Client> sommets;
     private HashMap<Integer, Arc> arcs;
+    private ArrayList<Client> clients = new ArrayList<>();
 
     public HashMap<Integer, Arc> getArcs() {
         return arcs;
@@ -29,7 +30,7 @@ public class Circuit {
         this.clients = clients;
     }
 
-    private ArrayList<Client> clients = new ArrayList<>();
+
 
 
     public Circuit() {
