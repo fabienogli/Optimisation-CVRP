@@ -146,10 +146,10 @@ public class testParametreGenetique {
 
     public static void testNbPop(int dataset) {
         List<Graphe> graphes = new ArrayList<>();
-        System.out.println("Test du nombre de population pour la dataset " + dataset);
+        System.out.println("Test du nombre de population pour la dataset " + dataset + " avec 20 générations et 0.14 en probabilité de mutation");
         String data = "data0" + dataset;
         for (int i = 10; i < 500; i++) {
-            Graphe graphe = Genetique.algo(i, 100, data, 0.14);
+            Graphe graphe = Genetique.algo(i, 20, data, 0.14);
             System.out.println("Meilleur solution: " + graphe.cout() + " pour une population de " + i);
             graphes.add(graphe);
         }
@@ -159,9 +159,9 @@ public class testParametreGenetique {
 
     public static void testNbGen(int dataset) {
         List<Graphe> graphes = new ArrayList<>();
-        System.out.println("Test du nombre de génération pour la dataset " + dataset);
+        System.out.println("Test du nombre de génération pour la dataset " + dataset + " avec 150 populations et 0.14 en probabilité de mutation");
         String data = "data0" + dataset;
-        for (int i = 10; i < 1000; i++) {
+        for (int i = 10; i < 150; i++) {
             Graphe graphe = Genetique.algo(150, i, data, 0.14);
             System.out.println("Meilleur solution: " + graphe.cout() + " pour " + i + " génération");
             graphes.add(graphe);
@@ -172,10 +172,10 @@ public class testParametreGenetique {
 
     public static void testMutation(int dataset) {
         List<Graphe> graphes = new ArrayList<>();
-        System.out.println("Test de la probabilité de mutation pour la dataset " + dataset);
+        System.out.println("Test de la probabilité de mutation pour la dataset " + dataset + " avec 150 populations et 20 générations");
         String data = "data0" + dataset;
-        for (double i = 0; i < 1; i=0.001) {
-            Graphe graphe = Genetique.algo(150, 100, data, i);
+        for (double i = 0; i < 1; i += 0.01) {
+            Graphe graphe = Genetique.algo(150, 20, data, i);
             System.out.println("Meilleur solution: " + graphe.cout() + " pour " + i + " comme probabilité de mutation");
             graphes.add(graphe);
         }
