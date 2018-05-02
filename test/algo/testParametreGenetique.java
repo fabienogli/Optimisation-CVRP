@@ -11,7 +11,12 @@ public class testParametreGenetique {
 
     public static void main(String[] args) {
         for (int i = 1; i < 6; i++) {
-            testMutation(i);
+            Graphe graphe = Genetique.algo(150, 50, "data0" + i, 0.14);
+            Graph graph = Graphe.adaptGraphe(graphe);
+            graph.display();
+        }
+        for (int i = 1; i < 6; i++) {
+//            testMutation(i);
             testNbGen(i);
             testMutation(i);
         }
