@@ -224,6 +224,27 @@ public class Graphe {
         graphe.setSommets((ArrayList)sommets);
         return graphe;
     }
+    public static Graphe swapRandomClient(Graphe graphe) {
+        Map<Integer, Client> map = Genetique.convertListToMapClient(graphe.getSommets());
+        Random random = new Random();
+        List<Integer> keys = new ArrayList<>(map.keySet());
+        int firstRandomKey = keys.get(random.nextInt(keys.size()));
+        int secondRandomKey =  keys.get(random.nextInt(keys.size()));
+        System.out.println(map.get(firstRandomKey));
+        while (map.get(firstRandomKey).getIdSommet() == 0) {
+            firstRandomKey = keys.get(random.nextInt(keys.size()));
+        }
+        while (map.get(secondRandomKey).getIdSommet() == 0 || secondRandomKey == firstRandomKey) {
+            secondRandomKey = keys.get(random.nextInt(keys.size()));
+        }
+        Client toSwap = map.get(firstRandomKey);
+        Client toSwap1 = map.get(secondRandomKey);
+        map.remove(toSwap);
+        map.remove(toSwap1);
+        map.put(secondRandomKey, toSwap);
+        map.put(firstRandomKey, toSwap1);
+        return new Graphe(new ArrayList<>(map.values()));
+    }
 
     public static Graphe swapRandomSommet(Graphe graphe) {
         //Map<Integer, Client> map = Genetique.convertListToMapClient(graphe.getSommets());
@@ -271,24 +292,6 @@ public class Graphe {
     @Override
     public String toString() {
         return "Graphe avec au max C =" + getCtotal() + ", un distance total de " + cout() + " et " + circuits.size() + " circuits";
-    }
-
-    public static void main(String args[]) {
-        Graphe graphe = new Graphe("data01");
-       // Graphe graphe1 = generateRandomGrapheFromSommet(graphe.getClients());
-        Graph graph = graphe.adaptGraphe();
-        graph.display();
-        Graphe graphe1=swapRandomSommet(graphe);
-        /*Graph graph = new MultiGraph("Tutorial 1");
-        SpriteManager sman = new SpriteManager(graph);
-        graph.addNode("C");
-        graph.addNode("A");
-        graph.addNode("B");*/
-
-        Graph graph1= graphe1.adaptGraphe();
-
-        graph1.display();
-
     }
 
     public Depot getDepot() {

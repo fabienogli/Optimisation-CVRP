@@ -28,62 +28,88 @@ public class Genetique {
      */
 
     public static Graphe algo(int nbPopulation, int nbGen, String dataset, double probaMutation) {
-        Graphe bestSolution;
-        List<Graphe> population = new ArrayList<>();
         List<Graphe> populationBis = new ArrayList<>();
-        Double minCout = -1.0;
-        Graphe minGraph = null;
-        for (int i = 0; i < nbPopulation; i++) {
-            //Initialisation de POP
-            Graphe graphe = Graphe.generateRandomGraph(dataset);
-            //Affectation des minimum
-            if (minGraph == null) {
-                minCout = graphe.cout();
-                minGraph = graphe;
-            }
-            population.add(graphe);
-        }
-        System.out.println(minCout+ " " + minGraph);
+        //Generation de la population initiale
+        List<Graphe> population = generatePop(dataset, nbPopulation);
+
+        //Evaluation de la population initiale
+        Graphe minGraph = evaluatePop(null, population);
+        Double minCout = minGraph.cout();
         for (int gen = 0; gen < nbGen; gen++) {
-            System.out.println("la fitness = "+ minCout);
-            while (populationBis.size() <= population.size()) {
+            while (populationBis.size() < population.size()) {
+                System.out.println("gen=" + gen + " fitness " + minCout);
                 //Phase de reproduction
                 List<Graphe> popReproduite = reproduction(population);
                 //Phase de croisement
-                List<Graphe> children = new ArrayList<>();
-                for (int i = 0; i < popReproduite.size()-1; i += 2) {
-                    children.add(crossover(popReproduite.get(i), popReproduite.get(i + 1), popReproduite.get(i).getSommets().size() / 2));
-                }
+                List<Graphe> children = randomCrossover(popReproduite);
+
                 //Phase de mutation
                 populationBis.addAll(children);
-//                for (int i = 0; i < children.size(); i++) {
-//                    populationBis.add(mutation(children.get(i), probaMutation));
-//                }
+                children.clear();
+                for (int i = 0; i < children.size(); i++) {
+                    populationBis.add(mutation(children.get(i), probaMutation));
+                }
 
             }
-//            System.out.println(population.size());
-//            System.out.println(populationBis.size());
-            if (populationBis != null) {
-                population = populationBis;
-                populationBis = new ArrayList<>();
-            }
-            evaluatePop(minCout, minGraph, population);
+            population = populationBis;
+            populationBis = new ArrayList<>();
+            System.out.println(populationBis.size());
+            minGraph = evaluatePop(minGraph, population);
+            minCout = minGraph.cout();
         }
         return minGraph;
     }
 
-    public static void evaluatePop(Double minCout, Graphe minGraph, List<Graphe> graphes) {
-        System.out.println(graphes);
+    /**
+     *
+     * @param graphes
+     * @ int[] tableau ave l'indice
+     */
+    public static List<Graphe> randomCrossover(List<Graphe> graphes) {
+        int sizeGraphe = graphes.get(0).getSommets().size();
+        Map<Integer, Graphe> mapPopReproduite = convertListToMapGraphe(graphes);
+        List<Graphe> children = new ArrayList<>();
+        while (mapPopReproduite.size() > 2) {
+            Random random = new Random();
+            int i_1 = randomGraph(mapPopReproduite);
+            int i_2 = randomGraph(mapPopReproduite);
+            int i_middle = random.nextInt(sizeGraphe - 1);
+            if (i_1 == -1) {
+                i_1 = randomGraph(mapPopReproduite);
+                i_2 = randomGraph(mapPopReproduite);
+                i_middle = random.nextInt(sizeGraphe - 1);
+            }
+
+            children.add(crossover(mapPopReproduite.get(i_1), mapPopReproduite.get(i_2), i_middle));
+            mapPopReproduite.remove(i_1);
+            mapPopReproduite.remove(i_2);
+        }
+        return children;
+    }
+
+    public static List<Graphe> crossOverByOrder(List<Graphe> graphes) {
+        int sizeGraphe = graphes.get(0).getSommets().size();
+        Map<Integer, Graphe> mapPopReproduite = convertListToMapGraphe(graphes);
+        List<Graphe> children = new ArrayList<>();
+        for (int i = 0; i < mapPopReproduite.size() -1 ; i += 2) {
+            Random random = new Random();
+            int i_middle = random.nextInt(sizeGraphe - 1);
+            children.add(crossover(mapPopReproduite.get(i), mapPopReproduite.get(i + 1), i_middle));
+        }
+        return children;
+    }
+
+
+    public static Graphe evaluatePop(Graphe minGraph, List<Graphe> graphes) {
         for (Graphe graphe : graphes) {
-            if (minGraph == null || minCout > graphe.cout()) {
-                minCout = graphe.cout();
+            if (minGraph == null || minGraph.cout() > graphe.cout()) {
                 minGraph = graphe;
             }
         }
+        return minGraph;
     }
 
     /**
-     *
      * @param _graphes List population initiale
      * @return graphe List population reproduite
      */
@@ -95,7 +121,7 @@ public class Genetique {
         }).sum();
         HashMap<Integer, Double> freq = new HashMap<>();
         graphes.forEach((integer, graphe) -> {
-            double result =1 / (graphe.cout() *sum);
+            double result = 1 / (graphe.cout() * sum);
             freq.put(integer, result);
         });
 //        System.out.println(freq);
@@ -108,12 +134,12 @@ public class Genetique {
                             .stream()
                             .sorted(Map.Entry.comparingByValue())
                             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-            Map.Entry<Integer, Double> result = freq_sorted.entrySet().stream().filter(integerDoubleEntry ->{
+            Map.Entry<Integer, Double> result = freq_sorted.entrySet().stream().filter(integerDoubleEntry -> {
                 if (integerDoubleEntry.getValue() < random) {
                     return true;
                 }
                 return false;
-            }).reduce((a,b) -> b).orElse(null);
+            }).reduce((a, b) -> b).orElse(null);
             if (result == null) {
                 result = freq_sorted.entrySet().iterator().next();
             }
@@ -123,12 +149,12 @@ public class Genetique {
     }
 
     public static Graphe crossover(Graphe first, Graphe second, int indice) {
-        List<Client> mom =  first.getSommets();
-        List<Client> dad =  second.getSommets();
+        List<Client> mom = first.getSommets();
+        List<Client> dad = second.getSommets();
 //        System.out.println("taille de la mere:" + mom.size());
 //        System.out.println("taille du pere:" + dad.size());
         if (mom.size() <= indice) {
-            System.out.println("mom size: "+mom.size() + " < indice:" + indice );
+            System.out.println("mom size: " + mom.size() + " < indice:" + indice);
             return first;
         }
 //        System.out.println("indice= " + indice);
@@ -228,7 +254,7 @@ public class Genetique {
             for (int j = i + 1; j < size; j++) {
                 Client toCompare = child.get(j);
                 if (client.equals(toCompare)) {
-                    missing_child1.put(j,toCompare);
+                    missing_child1.put(j, toCompare);
                     child.remove(j, toCompare);
                 }
             }
@@ -258,7 +284,7 @@ public class Genetique {
         if (random.nextDouble() >= prob) {
             return graphe;
         }
-        return Graphe.swapRandomSommet(graphe);
+        return Graphe.swapRandomClient(graphe);
     }
 
     public static void crossCircuit(Graphe mom, Graphe dad) {
@@ -268,4 +294,23 @@ public class Genetique {
         Circuit momPath = mom.getCircuits().get(i_momPath);
         Circuit dadPath = mom.getCircuits().get(i_dadPath);
     }
+
+    public static int randomGraph(Map<Integer, Graphe> graphes) {
+        Random random = new Random();
+        List<Integer> keys = new ArrayList<>(graphes.keySet());
+        int randomKey = keys.get(random.nextInt(keys.size()));
+        return randomKey;
+    }
+
+    public static List<Graphe> generatePop(String dataset, int nbPopulation) {
+        List<Graphe> population = new ArrayList<>();
+        for (int i = 0; i < nbPopulation; i++) {
+            //Initialisation de POP
+            Graphe graphe = Graphe.generateRandomGraph(dataset);
+            population.add(graphe);
+        }
+        return population;
+    }
+
+
 }

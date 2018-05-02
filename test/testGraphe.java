@@ -77,5 +77,9 @@ public class testGraphe {
         return true;
     }
 
+//    public static void testSwapRandomClient() {
+//        Graphe graphe
+//    }
+
 
 }

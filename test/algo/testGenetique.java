@@ -20,7 +20,10 @@ public class testGenetique {
 //
 //            testCrossover();
 //        }
-        testAlgoGenetique();
+//        testAlgoGenetique();
+//        testMutation();
+        optimisationCrossover();
+        optimisationMutation();
     }
 
     public static void littleTestRandom() {
@@ -169,7 +172,7 @@ public class testGenetique {
     }
 
     public static void testAlgoGenetique() {
-        Graphe graphe = Genetique.algo(150, 100, "data01", 0.05);
+        Graphe graphe = Genetique.algo(5000, 10, "data01", 0.1);
         System.out.println("Le cout final est " + graphe.cout());
         Graph graph = Graphe.adaptGraphe(graphe);
         graph.display();
@@ -189,5 +192,76 @@ public class testGenetique {
             }
         }
         return true;
+    }
+
+    public static void testMutation() {
+        for (int i = 0; i < 100; i++) {
+            Graphe inital = Graphe.generateRandomGraph("data01");
+            Graphe result = Genetique.mutation(inital, 0.1);
+        }
+    }
+
+    public static void optimisationCrossover() {
+        Graphe minGraphRandom = null;
+        int nbPopOptimaleRandom =0;
+        for (int i = 1000; i < 1000000; i *= 10) {
+            List<Graphe> pop = Genetique.generatePop("data01", 10);
+            minGraphRandom = Genetique.evaluatePop(minGraphRandom, pop);
+            for (int m = 0; m < 10; m++) {
+                List<Graphe> children = Genetique.randomCrossover(pop);
+                Graphe tmp = minGraphRandom;
+                minGraphRandom = Genetique.evaluatePop(minGraphRandom, children);
+                if (tmp == minGraphRandom) {
+                    nbPopOptimaleRandom = i;
+                }
+            }
+        }
+        System.out.println("Population optimale random crossover: " + nbPopOptimaleRandom);
+        System.out.println("Population optimale random crossover: cout  " + minGraphRandom.cout());
+
+        int nbPopOptimale =0;
+        Graphe minGraph = null;
+        for (int i = 1000; i < 1000000; i *= 10) {
+            List<Graphe> pop = Genetique.generatePop("data01", 10);
+            minGraph = Genetique.evaluatePop(minGraph, pop);
+            for (int m = 0; m < 10; m++) {
+                List<Graphe> children = Genetique.crossOverByOrder(pop);
+                Graphe tmp = minGraph;
+                minGraph = Genetique.evaluatePop(minGraph, children);
+                if (tmp == minGraph) {
+                    nbPopOptimale = i;
+                }
+            }
+        }
+        System.out.println("Population optimale random crossover: " + nbPopOptimale);
+        System.out.println("Population optimale random crossover: cout  " + minGraph.cout());
+        /**
+         * Result:
+         *
+         Population optimale random crossover: 100000
+         Population optimale random crossover: cout  1770.3564077262113
+         Population optimale random crossover: 100000
+         Population optimale random crossover: cout  1813.833239960234
+         */
+    }
+
+    public static void optimisationMutation() {
+        Graphe init = Graphe.generateRandomGraph("data01");
+        Graphe minGraph = null;
+        Double bestProb = 0.0;
+        for (double prob = 0; prob < 1; prob += 0.001) {
+            for (int i = 0; i < 1000; i++) {
+                Graphe result = Genetique.mutation(init, prob);
+                if (minGraph == null || result.cout() < minGraph.cout()) {
+                    minGraph = result;
+                    bestProb = prob;
+                }
+            }
+        }
+        System.out.println("La meilleur proba est " + bestProb + " et le min cout est " + minGraph.cout());
+        /**
+         * result
+         * La meilleur proba est 0.014000000000000005 et le min cout est 2066.67599441071
+         */
     }
 }
