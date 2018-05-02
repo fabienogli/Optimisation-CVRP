@@ -40,15 +40,15 @@ public class testGenetique {
 
         Random random = new Random();
         double result = random.nextDouble();
-//        System.out.println("le tirage: "+ result);
+//        //System.out.println("le tirage: "+ result);
         Map.Entry<Integer, Double> sa = testss.entrySet().stream().filter(integerDoubleEntry ->{
                 if (integerDoubleEntry.getValue() < result) {
                     return true;
                 }
                 return false;
             }).reduce((a,b) -> b).orElse(null);
-//        System.out.println(sa.getKey());
-//        System.out.println(sa.getValue());
+//        //System.out.println(sa.getKey());
+//        //System.out.println(sa.getValue());
 
     }
 
@@ -60,12 +60,12 @@ public class testGenetique {
         }
         List<Graphe> grapheHashMap1 = Genetique.reproduction(new ArrayList<Graphe>(grapheHashMap.values()));
         grapheHashMap.entrySet().stream().forEach(integerGrapheEntry -> {
-            System.out.println("cout du graphe " + integerGrapheEntry.getKey() + ": " + integerGrapheEntry.getValue().cout());
+            //System.out.println("cout du graphe " + integerGrapheEntry.getKey() + ": " + integerGrapheEntry.getValue().cout());
         });
         grapheHashMap1.forEach(integerGrapheEntry -> {
-            System.out.println("cout du graphe reproduit: " + integerGrapheEntry.cout());
+            //System.out.println("cout du graphe reproduit: " + integerGrapheEntry.cout());
         });
-//        System.out.println(grapheHashMap);
+//        //System.out.println(grapheHashMap);
     }
 
     public static void testRearangeChildren() {
@@ -97,27 +97,27 @@ public class testGenetique {
         client_2.add(e);
         client_2.add(a);
         client_2.add(f);
-        System.out.println("avant transformation");
+        //System.out.println("avant transformation");
         Map<Integer, Client> mapClient1 = Genetique.convertListToMapClient(client_1);
         Map<Integer, Client> mapClient2 = Genetique.convertListToMapClient(client_2);
-        System.out.println("premiere liste");
+        //System.out.println("premiere liste");
         mapClient1.forEach((key, value) -> {
-            System.out.println("Client " + key + ": " + value.getIdSommet());
+            //System.out.println("Client " + key + ": " + value.getIdSommet());
         });
-        System.out.println("seconde liste");
+        //System.out.println("seconde liste");
         mapClient2.forEach((key, value) -> {
-            System.out.println("Client " + key + ": " + value.getIdSommet());
+            //System.out.println("Client " + key + ": " + value.getIdSommet());
         });
         List<Map<Integer, Client>> result =  Genetique.rearangeChild(mapClient1, mapClient2);
         Map<Integer, Client> child1 = result.get(0);
         Map<Integer, Client> child2 = result.get(1);
-        System.out.println("premier child:");
+        //System.out.println("premier child:");
         child1.forEach((key, value) -> {
-            System.out.println("key: " + key+": " + value.getIdSommet());
+            //System.out.println("key: " + key+": " + value.getIdSommet());
         });
-        System.out.println("second child:");
+        //System.out.println("second child:");
         child1.forEach((key, value) -> {
-            System.out.println("key: " + key +": " + value.getIdSommet());
+            //System.out.println("key: " + key +": " + value.getIdSommet());
         });
     }
 
@@ -141,17 +141,17 @@ public class testGenetique {
         client_1.add(b);
         client_1.add(c);
         Map<Integer, Client> client = Genetique.convertListToMapClient(client_1);
-        System.out.println("premiere liste");
+        //System.out.println("premiere liste");
         client.forEach((key, value) -> {
-            System.out.println("valeur à la " + key + "position = " + value.getIdSommet());
+            //System.out.println("valeur à la " + key + "position = " + value.getIdSommet());
         });
         missingChild = Genetique.extractDoublon(client);
-        System.out.println("après algo");
+        //System.out.println("après algo");
         client.forEach((key, value) -> {
-            System.out.println("valeur à la " + key + " position = " + value.getIdSommet());
+            //System.out.println("valeur à la " + key + " position = " + value.getIdSommet());
         });
         missingChild.forEach((key, value) -> {
-            System.out.println("valeur manquante à la " + key + "position = " + value.getIdSommet());
+            //System.out.println("valeur manquante à la " + key + "position = " + value.getIdSommet());
         });
     }
 
@@ -159,10 +159,10 @@ public class testGenetique {
         Graphe graphe1 = Graphe.generateRandomGraph("data01");
         Graphe graphe2 = Graphe.generateRandomGraph("data01");
         Graphe result = Genetique.crossover(graphe1, graphe2, graphe1.getSommets().size() / 2);
-        System.out.println("cout des deux premiers graphes: " + graphe1.cout() + " et " + graphe2.cout());
-        System.out.println("cout du croisement: " +result.cout());
-        System.out.println("le graphe est il valide ? " + result.isValid());
-        System.out.println("le graphe possède-t-il tous les sommets ? " + checkIfAllSommetsHere(result));
+        //System.out.println("cout des deux premiers graphes: " + graphe1.cout() + " et " + graphe2.cout());
+        //System.out.println("cout du croisement: " +result.cout());
+        //System.out.println("le graphe est il valide ? " + result.isValid());
+        //System.out.println("le graphe possède-t-il tous les sommets ? " + checkIfAllSommetsHere(result));
         Graph visu1 = Graphe.adaptGraphe(graphe1);
         Graph visu2 = Graphe.adaptGraphe(graphe2);
         Graph visuResult = Graphe.adaptGraphe(result);
@@ -175,7 +175,7 @@ public class testGenetique {
 //        Graphe graphe = Genetique.algo(5000, 10, "data01", 0.1);
         //opti = popReproduction = 100000 prob=0.014 popCrossover =100000
         Graphe graphe = Genetique.algo(150, 100, "data01", 0.014);
-        System.out.println("Le cout final est " + graphe.cout());
+        //System.out.println("Le cout final est " + graphe.cout());
         Graph graph = Graphe.adaptGraphe(graphe);
         graph.display();
     }
@@ -189,7 +189,7 @@ public class testGenetique {
                 }
             }
             if (!found) {
-                System.out.println("Le sommets "+ i +" n'a pas été trouvé");
+                //System.out.println("Le sommets "+ i +" n'a pas été trouvé");
                 return false;
             }
         }
@@ -219,7 +219,7 @@ public class testGenetique {
         checkIfAllSommetsHere(graphe);
         Graph ui = Graphe.adaptGraphe(graphe);
 //        ui.display();
-        System.out.println(graphe);
+        //System.out.println(graphe);
     }
 
     public static Graphe createClient(int[] tab) {
@@ -229,5 +229,11 @@ public class testGenetique {
         }
         Genetique.debugListSommet(new ArrayList<Client>(clients.values()));
         return new Graphe(new ArrayList<Client>(clients.values()));
+
+    }
+
+    public static void runTest() {
+        //System.out.println("changement population");
+
     }
 }

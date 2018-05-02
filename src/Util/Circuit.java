@@ -18,7 +18,7 @@ public class Circuit {
     public void setArcs(HashMap<Integer, Arc> arcs) {
         this.arcs = arcs;
         this.sommets = new ArrayList<>();
-        this.arcs.forEach((key, value) -> this.sommets.add((Client) value.getSommets()[Arc.start]));
+        this.arcs.forEach((key, value) -> this.sommets.add((Client) value.getSommets()[Arc.end]));
     }
 
 
@@ -67,14 +67,14 @@ public class Circuit {
         Circuit circuit = (Circuit) obj;
         Map<Integer, Arc> arcs = circuit.getArcs();
         if (arcs.size() != this.arcs.size()) {
-            System.out.println("Ils n'y pas le même nombre d'arc");
+//            //System.out.println("Ils n'y pas le même nombre d'arc");
             return false;
         }
         for (int i = 0; i < this.arcs.size(); i++) {
             if (! this.arcs.get(i).equals(arcs.get(i))) {
-                System.out.println("Ces deux arcs à l'indice: "+ i + " sont différents");
-                System.out.println(arcs.get(i));
-                System.out.println(this.arcs.get(i));
+//                //System.out.println("Ces deux arcs à l'indice: "+ i + " sont différents");
+//                //System.out.println(arcs.get(i));
+//                //System.out.println(this.arcs.get(i));
                 return false;
             }
         }

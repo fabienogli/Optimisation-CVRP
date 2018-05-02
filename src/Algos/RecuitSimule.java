@@ -27,7 +27,7 @@ public class RecuitSimule {
         int circuitAlea1 = r.nextInt(circuits.size() - 1);
         //int arcAlea1 = r.nextInt(circuits.get(circuitAlea1).getArcs().size() - 2) + 1;
         int arcAlea1 = (int) circuits.get(circuitAlea1).getArcs().keySet().toArray()[new Random().nextInt(circuits.get(circuitAlea1).getArcs().keySet().toArray().length)];
-        System.out.println(circuits.size()+""+circuits.get(circuitAlea1).getArcs().size());
+        //System.out.println(circuits.size()+""+circuits.get(circuitAlea1).getArcs().size());
         Arc arctmp1 = circuits.get(circuitAlea1).getArcs().get(arcAlea1);
 
         int circuitAlea2 = 0;
@@ -42,8 +42,8 @@ public class RecuitSimule {
         }
         while (arcAlea1 == arcAlea2);
         Arc arctmp2=circuits.get(circuitAlea2).getArcs().get(arcAlea2);
-        System.out.println(circuitAlea1 + ""+arcAlea1);
-        System.out.println(circuitAlea2 + ""+arcAlea2);
+        //System.out.println(circuitAlea1 + ""+arcAlea1);
+        //System.out.println(circuitAlea2 + ""+arcAlea2);
         circuits.get(circuitAlea1).getArcs().get(arcAlea1).setSommets(circuits.get(circuitAlea2).getArcs().get(arcAlea2).getSommets());
         //pour les arcs ajacents on update les extremités;
         int arcAdjacent1=circuits.get(circuitAlea1).getArcs().get(arcAlea1).getArcAdjacent1();

@@ -37,13 +37,13 @@ public class Genetique {
         Double minCout = minGraph.cout();
         for (int gen = 0; gen < nbGen; gen++) {
             while (populationBis.size() < population.size()) {
-                System.out.println("gen=" + gen + " fitness " + minCout);
+//                //System.out.println("gen=" + gen + " fitness " + minCout);
                 //Phase de reproduction
                 List<Graphe> popReproduite = reproduction(population);
-                System.out.println("sortie reproduction");
+//                //System.out.println("sortie reproduction");
                 //Phase de croisement
-                List<Graphe> children = randomCrossover(popReproduite);
-                System.out.println("sortie crossover");
+                List<Graphe> children = crossOverWithBestSolution(popReproduite, minGraph);
+//                //System.out.println("sortie crossover");
 
                 //Phase de mutation
                 populationBis.addAll(children);
@@ -54,11 +54,11 @@ public class Genetique {
 
             }
             if (population.stream().mapToDouble(Graphe::cout).sum() > populationBis.stream().mapToDouble(Graphe::cout).sum()) {
-                System.out.println("ouhouh on a changé");
+//                //System.out.println("ouhouh on a changé");
                 population = populationBis;
             }
             populationBis = new ArrayList<>();
-            System.out.println(populationBis.size());
+//            //System.out.println(populationBis.size());
             minGraph = evaluatePop(minGraph, population);
             minCout = minGraph.cout();
         }
@@ -90,11 +90,35 @@ public class Genetique {
             mapPopReproduite.remove(i_2);
         }
 //        if (evaluatePop(null, children) == null) {
-//            System.out.println(graphes.size());
-//            System.out.println(children);
+//            //System.out.println(graphes.size());
+//            //System.out.println(children);
 //        }
-//        System.out.println();
-//        System.out.println("best of children = " + evaluatePop(null, children).cout());
+//        //System.out.println();
+//        //System.out.println("best of children = " + evaluatePop(null, children).cout());
+        return children;
+    }
+
+    public static List<Graphe> crossOverWithBestSolution(List<Graphe> graphes, Graphe best) {
+        int sizeGraphe = graphes.get(0).getSommets().size();
+        Map<Integer, Graphe> mapPopReproduite = convertListToMapGraphe(graphes);
+        List<Graphe> children = new ArrayList<>();
+        while (mapPopReproduite.size() > 2) {
+            Random random = new Random();
+            int i_1 = randomGraph(mapPopReproduite);
+            int i_middle = random.nextInt(sizeGraphe - 10);
+
+            children.add(crossover(mapPopReproduite.get(i_1), best, i_middle));
+            mapPopReproduite.remove(i_1);
+        }
+//                //System.out.println("best of children = " + evaluatePop(null, children).cout());
+//        //System.out.println("taille de children " + children.size());
+
+//        if (evaluatePop(null, children) == null) {
+//            //System.out.println(graphes.size());
+//            //System.out.println(children);
+//        }
+//        //System.out.println();
+//        //System.out.println("best of children = " + evaluatePop(null, children).cout());
         return children;
     }
 
@@ -125,14 +149,14 @@ public class Genetique {
      * @return graphe List population reproduite
      */
     public static List<Graphe> reproduction(List<Graphe> _graphes) {
-//        System.out.println("dans graph");
+//        //System.out.println("dans graph");
         Map<Integer, Graphe> graphes = convertListToMapGraphe(_graphes);
-//        System.out.println("après graph converti");
+//        //System.out.println("après graph converti");
         HashMap<Integer, Graphe> kiddo = new HashMap<Integer, Graphe>();
         double min = graphes.entrySet().stream().mapToDouble(entrey->{
             return entrey.getValue().cout();
         }).min().orElse(1);
-//        System.out.println("avant somme");
+//        //System.out.println("avant somme");
         Double sum = graphes.values().stream().mapToDouble(graphe -> {
             return graphe.cout() / min;
         }).sum();
@@ -157,71 +181,75 @@ public class Genetique {
     }
 
     public static Graphe crossover(Graphe first, Graphe second, int indice) {
-//        List<Client> mom = first.getSommets();
-//        List<Client> dad = second.getSommets();
-////        System.out.println("indice de changement " + indice);
-////        System.out.println("taille de la mere:" + mom.size());
-////        System.out.println("taille du pere:" + dad.size());
-//        if (mom.size() <= indice) {
-//            System.out.println("mom size: " + mom.size() + " < indice:" + indice);
-//            return first;
-//        }
-//
-////        System.out.println("indice= " + indice);
-////        System.out.println("valeur qui séprare mere " + mom.get(indice));
-////        System.out.println("mom :");
-////        mom.forEach(System.out::println);
-////        System.out.println("valeur qui séprare pere " + dad.get(indice));
-//        while (dad.get(indice).getIdSommet() == 0 || mom.get(indice).getIdSommet() == 0) {
-//            System.out.println("bloqué dans le while");
-//            System.out.println(dad.get(indice));
-//            System.out.println(mom.get(indice));
-//            indice++;
-//        }
-//        //debug
-//        Client pivot_mom = mom.get(indice);
-//        Client pivot_dad = dad.get(indice);
-//
-//        //fin debug
-//
-////        System.out.println("dad :");
-////        dad.forEach(System.out::println);
-//        //enfant de la première liste
-//        List<Client> child_1 = new ArrayList<>(mom.subList(0, indice));
-//        List<Client> child_2 = new ArrayList<>(dad.subList(0, indice));
-////        System.out.println("moit taille child 1 " + child_1.size());
-////        System.out.println("moit taille child 2 " + child_2.size());
-//        child_1.addAll(indice, new ArrayList<>(dad.subList(indice, dad.size())));
-////        System.out.println("mom sublist casse les couilles " + mom.subList(indice, mom.size()).size());
-////        System.out.println("sq taille child 1 " + child_1.size());
-//        child_2.addAll(indice, new ArrayList<>(mom.subList(indice, mom.size())));
-////        System.out.println("taille child 1 " + child_1.size());
-////        System.out.println("taille child 2 " + child_2.size());
-//
-//        Map<Integer, Client> mapChild1 = convertListToMapClient(child_1);
-//        Map<Integer, Client> mapChild2 = convertListToMapClient(child_2);
-//        List<Map<Integer, Client>> rearangeChildren = rearangeChild(mapChild1, mapChild2);
-//        child_1 = new ArrayList<>(rearangeChildren.get(0).values());
-//        child_2 = new ArrayList<>(rearangeChildren.get(1).values());
-////        System.out.println("child 1");
-////        child_1.forEach(System.out::println);
-////        System.out.println("child 2");
-////        child_2.forEach(System.out::println);
-//        Graphe graphe = new Graphe(child_1);
-//        Graphe graphe2 = new Graphe(child_2);
-//        if (!checkIfAllSommetsHere(graphe)){
-//            return debug(mom, dad, pivot_mom, pivot_dad, child_1, child_2, graphe, graphe2);
-//        }
-//        if (!checkIfAllSommetsHere(graphe2)){
-//            return debug(mom, dad, pivot_mom, pivot_dad, child_1, child_2, graphe, graphe2);
-//        }
-////        System.out.println("fils 1: "+ graphe.cout());
-////        System.out.println("fils 2: "+graphe2.cout());
-//        if (graphe.cout() > graphe2.cout()) {
-////            System.out.println(" on a choisi child 2");
-//            return graphe2;
-//        }
-////        System.out.println(" on a choisi child 1");
+        /*Broken
+        List<Client> mom = first.getSommets();
+        List<Client> dad = second.getSommets();
+//        //System.out.println("indice de changement " + indice);
+//        //System.out.println("taille de la mere:" + mom.size());
+//        //System.out.println("taille du pere:" + dad.size());
+        if (mom.size() <= indice) {
+            //System.out.println("mom size: " + mom.size() + " < indice:" + indice);
+            return first;
+        }
+
+//        //System.out.println("indice= " + indice);
+//        //System.out.println("valeur qui séprare mere " + mom.get(indice));
+//        //System.out.println("mom :");
+//        mom.forEach(System.out::println);
+//        //System.out.println("valeur qui séprare pere " + dad.get(indice));
+        while (dad.get(indice).getIdSommet() == 0 || mom.get(indice).getIdSommet() == 0) {
+            //System.out.println("bloqué dans le while");
+            //System.out.println(dad.get(indice));
+            //System.out.println(mom.get(indice));
+            indice++;
+        }
+        //debug
+        Client pivot_mom = mom.get(indice);
+        Client pivot_dad = dad.get(indice);
+
+        //fin debug
+
+//        //System.out.println("dad :");
+//        dad.forEach(System.out::println);
+        //enfant de la première liste
+        List<Client> child_1 = new ArrayList<>(mom.subList(0, indice));
+        List<Client> child_2 = new ArrayList<>(dad.subList(0, indice));
+//        //System.out.println("moit taille child 1 " + child_1.size());
+//        //System.out.println("moit taille child 2 " + child_2.size());
+        child_1.addAll(indice, new ArrayList<>(dad.subList(indice, dad.size())));
+//        //System.out.println("mom sublist casse les couilles " + mom.subList(indice, mom.size()).size());
+//        //System.out.println("sq taille child 1 " + child_1.size());
+        child_2.addAll(indice, new ArrayList<>(mom.subList(indice, mom.size())));
+//        //System.out.println("taille child 1 " + child_1.size());
+//        //System.out.println("taille child 2 " + child_2.size());
+
+        Map<Integer, Client> mapChild1 = convertListToMapClient(child_1);
+        Map<Integer, Client> mapChild2 = convertListToMapClient(child_2);
+        List<Map<Integer, Client>> rearangeChildren = rearangeChild(mapChild1, mapChild2);
+        child_1 = new ArrayList<>(rearangeChildren.get(0).values());
+        child_2 = new ArrayList<>(rearangeChildren.get(1).values());
+//        //System.out.println("child 1");
+//        child_1.forEach(System.out::println);
+//        //System.out.println("child 2");
+//        child_2.forEach(System.out::println);
+        Graphe graphe = new Graphe(child_1);
+        Graphe graphe2 = new Graphe(child_2);
+        if (!checkIfAllSommetsHere(graphe)){
+            return debug(mom, dad, pivot_mom, pivot_dad, child_1, child_2, graphe, graphe2);
+        }
+        if (!checkIfAllSommetsHere(graphe2)){
+            return debug(mom, dad, pivot_mom, pivot_dad, child_1, child_2, graphe, graphe2);
+        }
+//        //System.out.println("fils 1: "+ graphe.cout());
+//        //System.out.println("fils 2: "+graphe2.cout());
+        if (graphe.cout() > graphe2.cout()) {
+//            //System.out.println(" on a choisi child 2");
+            return graphe2;
+        } else {
+            return graphe;
+        }
+        */
+//        //System.out.println(" on a choisi child 1");
         Graphe toChange;
         Graphe toInsert;
         if (first.cout() > second.cout()) {
@@ -234,67 +262,67 @@ public class Genetique {
         Random random = new Random();
         int tmp = random.nextInt(toInsert.getCircuits().size() -1);
         Circuit circuit = toInsert.getCircuits().stream().min(Comparator.comparingDouble(cxs->{
-//            System.out.println(cxs.cout());
+//            //System.out.println(cxs.cout());
             return cxs.cout();
         })).orElse(toInsert.getCircuits().get(0));
         Graphe graphe = Graphe.addCircuit(toChange, circuit);
-//        System.out.println("GRAPH: " +graphe);
+//        //System.out.println("GRAPH: " +graphe);
         return graphe;
     }
 
     private static Graphe debug(List<Client> mom, List<Client> dad, Client pivot_mom, Client pivot_dad, List<Client> child_1, List<Client> child_2, Graphe graphe, Graphe graphe2) {
-        System.out.println("debug graphe");
-        System.out.println(graphe);
-        System.out.println("mom avec " + child_1.size() + " sommets");
-        System.out.println("pivot = " + pivot_mom.getIdSommet());
-        System.out.println("mom");
+        //System.out.println("debug graphe");
+        //System.out.println(graphe);
+        //System.out.println("mom avec " + child_1.size() + " sommets");
+        //System.out.println("pivot = " + pivot_mom.getIdSommet());
+        //System.out.println("mom");
         debugListSommet(mom);
-        System.out.println(graphe2);
-        System.out.println("dad avec " + child_2.size() + " sommets");
-        System.out.println("pivot = " + pivot_dad.getIdSommet());
-        System.out.println("dad");
+        //System.out.println(graphe2);
+        //System.out.println("dad avec " + child_2.size() + " sommets");
+        //System.out.println("pivot = " + pivot_dad.getIdSommet());
+        //System.out.println("dad");
         debugListSommet(dad);
-        System.out.println("child1");
+        //System.out.println("child1");
         debugListSommet(child_1);
-        System.out.println("child2");
+        //System.out.println("child2");
         debugListSommet(child_2);
-        System.out.println("fin debug");
+        //System.out.println("fin debug");
         return null;
     }
 
     public static void debugListSommet(List<Client> clients) {
 //        clients.forEach(client -> {
 //            if (client == null) {
-//                System.out.println("WTFTFTTFTFT");
+//                //System.out.println("WTFTFTTFTFT");
 //            }
 //            System.out.print(client.getIdSommet()+", ");
 //        });
-        System.out.println();
+        //System.out.println();
     }
 
     public static List<Map<Integer, Client>> rearangeChild(Map<Integer, Client> child_1, Map<Integer, Client> child_2) {
         List<Map<Integer, Client>> result = new ArrayList<>();
-//        System.out.println("child 2");
+//        //System.out.println("child 2");
         Map<Integer, Client> missing_child1 = extractDoublon(child_2);
-//        System.out.println("child 1");
+//        //System.out.println("child 1");
         Map<Integer, Client> missing_child2 = extractDoublon(child_1);
-//        System.out.println(missing_child1.size());
-//        System.out.println(missing_child2.size());
-//        System.out.println("missing_child1");
+//        //System.out.println(missing_child1.size());
+//        //System.out.println(missing_child2.size());
+//        //System.out.println("missing_child1");
 //        missing_child1.forEach((key, value) -> {
-//            System.out.println(key +" : " + value.getIdSommet());
+//            //System.out.println(key +" : " + value.getIdSommet());
 //        });
-//        System.out.println("missing_child2");
+//        //System.out.println("missing_child2");
 //        missing_child2.forEach((key, value) -> {
-//            System.out.println(key +" : " + value.getIdSommet());
+//            //System.out.println(key +" : " + value.getIdSommet());
 //        });
-//        System.out.println("chil1"+ child_1.size());
+//        //System.out.println("chil1"+ child_1.size());
 //        child_1.forEach((key, value) -> {
-//            System.out.println(key +" : " + value.getIdSommet());
+//            //System.out.println(key +" : " + value.getIdSommet());
 //        });
-//        System.out.println("chil2 de taille " + child_2.size());
+//        //System.out.println("chil2 de taille " + child_2.size());
 //        child_2.forEach((key, value) -> {
-//            System.out.println(key +" : " + value.getIdSommet());
+//            //System.out.println(key +" : " + value.getIdSommet());
 //        });
         missing_child1.forEach((key, value) -> {
             if (missing_child2.isEmpty()) {
@@ -316,7 +344,7 @@ public class Genetique {
 
     public static Map<Integer, Client> extractDoublon(Map<Integer, Client> child) {
         Map<Integer, Client> missing_child1 = new HashMap<>();
-//        System.out.println("taille=" +child.size());
+//        //System.out.println("taille=" +child.size());
         int size = child.size();
         for (int i = 0; i < size; i++) {
             Client client = child.get(i);
@@ -404,7 +432,7 @@ public class Genetique {
                 }
             }
             if (!found) {
-                System.out.println("Le sommets "+ i +" n'a pas été trouvé");
+//                //System.out.println("Le sommets "+ i +" n'a pas été trouvé");
                 return false;
             }
         }

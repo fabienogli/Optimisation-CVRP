@@ -26,7 +26,7 @@ public class Graphe {
     }
 
     public Graphe(List<Client> sommets) {    //Pour pouvoir faire un constructeur avec les sommets
-//        System.out.println("dans le constructeur graphe");
+//        //System.out.println("dans le constructeur graphe");
         this.sommets = sommets;
         this.circuits = new ArrayList<>();
         Client tmp = sommets.get(0);
@@ -40,12 +40,12 @@ public class Graphe {
         HashMap<Integer, Arc> arcs = new HashMap<>();
         for (int i =1; i < sommets.size(); i++) {
             Client sommet = sommets.get(i);
-//            System.out.println(sommet);
+//            //System.out.println(sommet);
             if (lastSommet == depot && sommet.getIdSommet() == 0) {
                 continue;
             }
             if (sommet.getQuantite() + circuit.getC() > 100) {
-//                System.out.println("premier if: " + circuit.getC());
+//                //System.out.println("premier if: " + circuit.getC());
                 arcs.put(i_arc, new Arc(lastSommet, depot));
                 circuit.setArcs(arcs);
                 this.circuits.add(circuit);
@@ -57,7 +57,6 @@ public class Graphe {
             if (sommet.getIdSommet() == 0) {
                 sommet = depot;
             }
-            circuit.addSommet(sommet);
             arcs.put(i_arc, new Arc(lastSommet, sommet));
             lastSommet = sommet;
             if (lastSommet == depot) {
@@ -69,10 +68,13 @@ public class Graphe {
             }
             i_arc++;
         }
-        arcs.put(i_arc, new Arc(lastSommet, depot));
-        circuit.setArcs(arcs);
-        this.circuits.add(circuit);
-//        System.out.println("dans le constructeur graphe");
+        if (lastSommet.getIdSommet() != 0) {
+            arcs.put(i_arc, new Arc(lastSommet, depot));
+            circuit.setArcs(arcs);
+            this.circuits.add(circuit);
+        }
+
+//        //System.out.println("dans le constructeur graphe");
     }
 
     public Graphe(String dataset) {
@@ -86,7 +88,7 @@ public class Graphe {
         int nbClients = this.clients.size() - 1;
         int j = 1;
         while (i <= nbClients) {
-            System.out.println("Circuit " + i);
+//            //System.out.println("Circuit " + i);
             int Cmax = 0;
             Circuit circuit = new Circuit();
             HashMap<Integer, Arc> arcs = new HashMap<>();
@@ -109,7 +111,7 @@ public class Graphe {
                     j++;
                     circuit.getClients().add(this.clients.get(i));
                     i++;
-                    System.out.println("Cmax=" + Cmax);
+//                    //System.out.println("Cmax=" + Cmax);
                 }
                 Arc arc2 = new Arc(this.clients.get(i - 1), this.clients.get(0));
                 arcs.put(j, arc2);
@@ -132,7 +134,7 @@ public class Graphe {
             circuit.setArcs(arcs);
             circuits.add(circuit);
         }
-        System.out.println("Fin Construction");
+//        //System.out.println("Fin Construction");
     }
 
     private Graph adaptGraphe() {
@@ -145,12 +147,12 @@ public class Graphe {
             graph.addNode(Integer.toString(client.getIdSommet()));
         });
         for (int i = 0; i < circuits.size(); i++) {
-            System.out.println("Circuit " + i);
+//            //System.out.println("Circuit " + i);
             for (int keySet : circuits.get(i).getArcs().keySet()) {
                 String s2 = Integer.toString(circuits.get(i).getArcs().get(keySet).getSommets()[0].getIdSommet());
                 String s3 = Integer.toString(circuits.get(i).getArcs().get(keySet).getSommets()[1].getIdSommet());
                 graph.addEdge(s2 + s3, s2, s3);
-                System.out.println(s2 + s3 + "-" + s2 + "-" + s3);
+//                //System.out.println(s2 + s3 + "-" + s2 + "-" + s3);
             }
         }
         for (Node node : graph) {
@@ -263,7 +265,7 @@ public class Graphe {
         List<Integer> keys = new ArrayList<>(map.keySet());
         int firstRandomKey = keys.get(random.nextInt(keys.size()));
         int secondRandomKey =  keys.get(random.nextInt(keys.size()));
-        System.out.println(map.get(firstRandomKey));
+//        //System.out.println(map.get(firstRandomKey));
         while (map.get(firstRandomKey).getIdSommet() == 0) {
             firstRandomKey = keys.get(random.nextInt(keys.size()));
         }
@@ -277,7 +279,7 @@ public class Graphe {
         map.put(secondRandomKey, toSwap);
         map.put(firstRandomKey, toSwap1);
         graphe.setClients(map);
-        //System.out.println(map.values().stream().collect(Collectors.toList()));
+        ////System.out.println(map.values().stream().collect(Collectors.toList()));
         //return new Graphe(map.values().stream().collect(Collectors.toList()));
         return  new Graphe(graphe.clients);
     }
@@ -286,13 +288,13 @@ public class Graphe {
     public boolean equals(Object obj) {
         ArrayList<Circuit> circuits = ((Graphe) obj).getCircuits();
         if (circuits.size() != this.circuits.size()) {
-            System.out.println("Les deux graphes ont des tailles différentes:");
-            System.out.println(this.circuits.size() +" et " + circuits.size());
+            //System.out.println("Les deux graphes ont des tailles différentes:");
+            //System.out.println(this.circuits.size() +" et " + circuits.size());
             return false;
         }
         for (int i = 0; i < this.circuits.size(); i++) {
             if (! circuits.get(i).equals(this.circuits.get(i))) {
-                System.out.println("le circuit numero "+ i + " est different");
+                //System.out.println("le circuit numero "+ i + " est different");
                 return false;
             }
         }
@@ -355,7 +357,7 @@ public class Graphe {
     public boolean isValid() {
         for (int i = 0; i < circuits.size(); i++) {
             if (circuits.get(i).getC() > 100) {
-                System.out.println("Un circuit "+ i + " n'est pas valide: C= " +circuits.get(i).getC());
+                //System.out.println("Un circuit "+ i + " n'est pas valide: C= " +circuits.get(i).getC());
                 return false;
             }
         }
@@ -365,7 +367,7 @@ public class Graphe {
     public static Graphe addCircuit(Graphe graphe, Circuit circuit) {
         List<Client> clientsCircuit = circuit.getSommets();
         List<Client> clients = graphe.getSommets();
-//        System.out.println(circuit.getSommets());
+//        //System.out.println(circuit.getSommets());
         for (Client tmp : clientsCircuit) {
             if (tmp.getIdSommet() == 0) {
                 continue;
@@ -388,14 +390,15 @@ public class Graphe {
             if (i > 0 && tmp.getIdSommet() == 0 && clean.get(i-1).getIdSommet() == 0) {
                 continue;
             }
-//            System.out.println(tmp.getIdSommet());
+//            //System.out.println(tmp.getIdSommet());
             clean.add(i, tmp);
             i++;
         }
-//        System.out.println("i =" + i);
-//        System.out.println();
+//        //System.out.println("i =" + i);
+//        //System.out.println();
 //        Genetique.debugListSommet(clean);
         clean.size();
+
         return new Graphe(clean);
     }
 }

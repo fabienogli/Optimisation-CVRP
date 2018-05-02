@@ -23,9 +23,9 @@ public class testGraphe {
         Graphe graphe = Graphe.generateRandomGraph("data01");
         checkIfAllSommetsHere(graphe);
         graphe.getCircuits().stream().forEach(circuit -> {
-            System.out.println("cout de circuit: " + circuit.cout());
+//            //System.out.println("cout de circuit: " + circuit.cout());
         });
-        System.out.println("cout du graphe" + graphe.cout());
+//        //System.out.println("cout du graphe" + graphe.cout());
 //        Graph visu = Graphe.adaptGraphe(graphe);
 //        visu.display();
     }
@@ -33,11 +33,11 @@ public class testGraphe {
     public static void testRandomSwap() {
         Graphe graphe = Graphe.generateRandomGraph("data01");
         graphe.getCircuits().stream().forEach(circuit -> {
-            System.out.println("cout de circuit: " + circuit.cout());
+//            //System.out.println("cout de circuit: " + circuit.cout());
         });
-        System.out.println("cout du graphe" + graphe.cout());
+//        //System.out.println("cout du graphe" + graphe.cout());
         Graphe swapped = Graphe.swapRandomSommet(graphe);
-        System.out.println(graphe.cout());
+        //System.out.println(graphe.cout());
         Graph graph = Graphe.adaptGraphe(graphe);
         graph.display();
         Graph graph1 = Graphe.adaptGraphe(swapped);
@@ -47,11 +47,11 @@ public class testGraphe {
 
     public static void testConstructeurAvecSommet() {
         Graphe graphe = Graphe.generateRandomGraph("data01");
-        System.out.println(graphe.equals(graphe));
+        //System.out.println(graphe.equals(graphe));
         List<Client>  sommets = graphe.getSommets();
-        System.out.println(sommets.size());
+        //System.out.println(sommets.size());
         Graphe ne = new Graphe(sommets);
-        System.out.println(graphe.equals(ne));
+        //System.out.println(graphe.equals(ne));
         Graph visu1 = Graphe.adaptGraphe(graphe);
         Graph visu2 = Graphe.adaptGraphe(ne);
         visu1.display();
@@ -73,7 +73,7 @@ public class testGraphe {
                 }
             }
             if (!found) {
-                System.out.println("Le sommets "+ i +" n'a pas été trouvé");
+                //System.out.println("Le sommets "+ i +" n'a pas été trouvé");
                 return false;
             }
         }
