@@ -116,9 +116,9 @@ public class RecuitSimule {
 
 
 
-    public  static  void main(String args[]) throws CloneNotSupportedException {
+    /*public  static  void main(String args[]) throws CloneNotSupportedException {
         Graphe graphe = new Graphe("data01");
         executeAlgo(0.00001,0.99,graphe,100.0,10000);
         //executeAlgo2(0.01,0.4,graphe,100.0);
-    }
+    }*/
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label layoutX="57.0" layoutY="31.0" text="Taille population" />
+      <Label layoutX="57.0" layoutY="67.0" text="Probabilité mutation" />
+      <Label layoutX="57.0" layoutY="107.0" text="Nombre de générations :" />
+      <TextField fx:id="taillepop" layoutX="176.0" layoutY="27.0" text="150" />
+      <TextField fx:id="proba" layoutX="190.0" layoutY="63.0" text="0.014" />
+      <TextField fx:id="nbgen" layoutX="216.0" layoutY="103.0" text="100" />
+      <Button fx:id="lancerButton" layoutX="434.0" layoutY="63.0" mnemonicParsing="false" onAction="#lancer" text="Lancer" />
+   </children>
+</AnchorPane>

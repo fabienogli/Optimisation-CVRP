@@ -378,26 +378,6 @@ public class Graphe implements Cloneable {
         return (Graphe) super.clone();
     }
 
-    public static void main(String args[]) throws CloneNotSupportedException {
-        Graphe graphe = new Graphe("data01");
-        System.out.println(graphe.cout());
-        System.out.println(graphe.cout2());
-        // Graphe graphe1 = generateRandomGrapheFromSommet(graphe.getClients());
-        Graph graph = graphe.adaptGraphe();
-        graph.display();
-        Graphe graphe1 = swapRandomSommet2(graphe);
-        System.out.println(graphe1.cout());
-        System.out.println(graphe1.cout2());
-        /*Graph graph = new MultiGraph("Tutorial 1");
-        SpriteManager sman = new SpriteManager(graph);
-        graph.addNode("C");
-        graph.addNode("A");
-        graph.addNode("B");*/
-
-        Graph graph1 = graphe1.adaptGraphe();
-
-        graph1.display();
-    }
 
     @Override
     public String toString() {
